@@ -1,0 +1,63 @@
+.house-wrapper {
+  position: absolute;
+  display: flex;
+  bottom: 50px;
+  .house {
+    position: relative;
+    background: rgb(243, 242, 254);
+    background: linear-gradient(180deg, #f3f2fe 0%, #8891b9 100%);
+    height: 60px;
+    width: 45px;
+    &::before,
+    &::after {
+      position: absolute;
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: #1e1547;
+      left: calc(50% - 5px);
+    }
+
+    &::before {
+      top: 13px;
+    }
+    &::after {
+      bottom: 18px;
+    }
+  }
+  .wall {
+    position: relative;
+    background: #1e1547;
+    height: 60px;
+    width: 25px;
+    &::before {
+      content: '';
+      position: absolute;
+      background: #d8db9a;
+      width: 10px;
+      height: 10px;
+      left: calc(50% - 5px);
+      top: 20px;
+    }
+    &::after {
+      position: absolute;
+      top: -12.5px;
+      left: 0;
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 12.5px 12.5px 12.5px;
+      border-color: transparent transparent #1e1547 transparent;
+    }
+  }
+  .roof {
+    background: #4699b6;
+    height: 12.3px;
+    width: 45px;
+    position: absolute;
+    top: -12.3px;
+    right: 6px;
+    transform: skew(44deg);
+  }
+}

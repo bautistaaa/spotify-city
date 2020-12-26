@@ -1,0 +1,65 @@
+.building {
+  .night {
+    height: 400px;
+    width: 100%;
+    max-width: 800px;
+    background: rgb(47, 69, 83);
+    background: linear-gradient(
+      180deg,
+      rgba(47, 69, 83, 1) 0%,
+      rgba(71, 85, 147, 1) 46%
+    );
+    margin: 0 auto;
+    position: relative;
+
+    .moon {
+      position: absolute;
+      top: 100px;
+      left: 110px;
+      width: 100px;
+      height: 100px;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0px 0px 50px 30px rgba(255, 255, 255, 0.6);
+    }
+    .ground-wrapper {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50px;
+      div[class*='house'] {
+        z-index: 5;
+      }
+      .ground {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background-color: #727695;
+        z-index: 2;
+      }
+      .shadow,
+      .shadow-2,
+      .shadow-3 {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.2) 0%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        z-index: 3;
+      }
+      .shadow {
+        clip-path: polygon(42.2% 0, 66.7% 0, 106% 100%, 95% 100%);
+      }
+      .shadow-2 {
+        clip-path: polygon(6% 0, 20% 0, 11% 100%, -2% 100%);
+      }
+      .shadow-3 {
+        clip-path: polygon(77.2% 0, 85.7% 0, 146% 100%, 119% 100%);
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+#wrap {
+  height: 400px;
+  width: 100%;
+  max-width: 800px;
+  background-color: #fce043;
+  background: linear-gradient(
+    -5deg,
+    rgb(252, 224, 67) 0%,
+    rgb(251, 123, 162) 64%
+  );
+  //background-image: linear-gradient(-5deg, #fce043 0%, #fb7ba2 64%);
+  margin: 0 auto;
+  position: relative;
+
+  .moon {
+    position: absolute;
+    bottom: 140px;
+    left: 210px;
+    width: 150px;
+    height: 150px;
+    opacity: 0.8;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 0px 50px 30px rgba(255, 255, 255, 0.6);
+  }
+
+  .mountain-wrapper {
+    position: absolute;
+    left: calc(50% - 80px);
+    bottom: 50px;
+  }
+  .mountain {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-bottom: 140px solid #d4aba1;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+    z-index: 5;
+    .shade {
+      width: 0;
+      height: 0;
+      border-bottom: 140px solid #77757c;
+      border-right: 80px solid transparent;
+      margin-top: 80px;
+      z-index: 6;
+    }
+  }
+
+  .mountain-2-wrapper {
+    position: absolute;
+    left: 33%;
+    bottom: 50px;
+    opacity: 0.5;
+  }
+  .mountain-2 {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-bottom: 80px solid #d4aba1;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    z-index: 5;
+    .shade-2 {
+      width: 0;
+      height: 0;
+      border-bottom: 80px solid #77757c;
+      border-right: 40px solid transparent;
+      margin-top: 40px;
+      z-index: 6;
+    }
+  }
+
+  .mountain-3-wrapper {
+    position: absolute;
+    left: 55%;
+    bottom: 50px;
+    opacity: 0.75;
+  }
+  .mountain-3 {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-bottom: 110px solid #d4aba1;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    z-index: 5;
+    .shade-3 {
+      width: 0;
+      height: 0;
+      border-bottom: 110px solid #7f7a8e;
+      border-right: 70px solid transparent;
+      margin-top: 70px;
+      z-index: 6;
+    }
+  }
+
+  .ground-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    .ground {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: #909090;
+      z-index: 2;
+    }
+
+    .shadow {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      clip-path: polygon(40% 0, 60% 0, 102% 410%, 55% 100%);
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0) 100%
+      );
+      z-index: 3;
+    }
+  }
+}

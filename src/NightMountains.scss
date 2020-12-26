@@ -1,0 +1,184 @@
+@mixin background-opacity($color, $opacity: 0.3) {
+  background: $color; /* The Fallback */
+  background: rgba($color, $opacity);
+}
+.night {
+  height: 400px;
+  width: 100%;
+  max-width: 800px;
+  background: rgb(47, 69, 83);
+  background: linear-gradient(
+    180deg,
+    rgba(47, 69, 83, 1) 0%,
+    rgba(71, 85, 147, 1) 46%
+  );
+  margin: 0 auto;
+  position: relative;
+
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  .moon {
+    position: absolute;
+    top: 100px;
+    left: 110px;
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0px 0px 50px 30px rgba(255, 255, 255, 0.6);
+  }
+
+  .mountain-wrapper {
+    position: absolute;
+    left: calc(50% - 80px);
+    bottom: 50px;
+  }
+  .mountain {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-bottom: 140px solid #8b8fab;
+    border-left: 80px solid transparent;
+    border-right: 80px solid transparent;
+    z-index: 5;
+    .shade {
+      width: 0;
+      height: 0;
+      border-bottom: 140px solid #6e6a7b;
+      border-right: 80px solid transparent;
+      margin-top: 80px;
+      z-index: 6;
+    }
+  }
+
+  .mountain-2-wrapper {
+    position: absolute;
+    left: 33%;
+    bottom: 50px;
+    opacity: 0.5;
+  }
+  .mountain-2 {
+    position: relative;
+    width: 0;
+    height: 0;
+
+    border-bottom: 80px solid #8b8fab;
+    border-left: 40px solid transparent;
+    border-right: 40px solid transparent;
+    z-index: 5;
+    .shade-2 {
+      width: 0;
+      height: 0;
+      border-bottom: 80px solid #6e6a7b;
+      border-right: 40px solid transparent;
+      margin-top: 40px;
+      z-index: 6;
+    }
+  }
+
+  .mountain-3-wrapper {
+    position: absolute;
+    left: 55%;
+    bottom: 50px;
+    opacity: 0.75;
+  }
+  .mountain-3 {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-bottom: 110px solid #8b8fab;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+    z-index: 5;
+    .shade-3 {
+      width: 0;
+      height: 0;
+      border-bottom: 110px solid #6e6a7b;
+      border-right: 70px solid transparent;
+      margin-top: 70px;
+      z-index: 6;
+    }
+  }
+
+  .mountain-biggest-wrapper {
+    position: absolute;
+    right: 3%;
+    bottom: 50px;
+  }
+  .mountain-biggest {
+    position: relative;
+    width: 0;
+    height: 0;
+    border-bottom: 200px solid #8b8fab;
+    border-left: 110px solid transparent;
+    border-right: 110px solid transparent;
+    z-index: 5;
+    .shade-biggest {
+      width: 0;
+      height: 0;
+      border-bottom: 200px solid #6e6a7b;
+      border-right: 110px solid transparent;
+      margin-top: 110px;
+      z-index: 6;
+    }
+  }
+
+  .mountain-biggest2-wrapper {
+    position: absolute;
+    left: 6%;
+    bottom: 50px;
+    .mountain-biggest {
+      position: relative;
+      width: 0;
+      height: 0;
+      border-bottom: 220px solid #8b8fab;
+      border-left: 140px solid transparent;
+      border-right: 140px solid transparent;
+      z-index: 5;
+      .shade-biggest {
+        width: 0;
+        height: 0;
+        border-bottom: 220px solid #6e6a7b;
+        border-right: 140px solid transparent;
+        margin-top: 140px;
+        z-index: 6;
+      }
+    }
+  }
+
+  .ground-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    .ground {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background-color: #909090;
+      z-index: 2;
+    }
+
+    .shadow {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      clip-path: polygon(6% 0, 60% 0, 102% 410%, 13% 100%);
+      //background-color: #737275;
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3) 0%,
+        rgba(0, 0, 0, 0) 100%
+      );
+      z-index: 3;
+    }
+  }
+}

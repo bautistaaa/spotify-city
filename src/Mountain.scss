@@ -1,0 +1,16 @@
+.playground {
+  .mountain-wrapper {
+    position: absolute;
+    left: calc(50% - 80px);
+    bottom: 50px;
+  }
+  .mountain {
+    position: relative;
+    width: 0;
+    height: 0;
+    .shade {
+      width: 0;
+      height: 0;
+    }
+  }
+}
