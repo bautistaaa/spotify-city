@@ -17,7 +17,7 @@ import { MountainsMetaData } from './utils/generateMountains';
 
 import './Playground.scss';
 
-const Playground: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
+const CityEditor: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   const [state, dispatch] = useReducer(reducer, audioFeatures);
   const { tempo, type, valence } = state;
   const timeOfDay = getTimeOfDay(valence);
@@ -129,4 +129,5 @@ const Playground: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   );
 };
 
-export default Playground;
+export default CityEditor;
+

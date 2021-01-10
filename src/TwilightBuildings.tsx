@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import TreeGroup from './TreeGroup';
 import Tree from './Tree';
+import StreetLight from './StreetLight';
 import SmallHouse from './SmallHouse';
 import MediumHouse from './MediumHouse';
 import LargeHouse from './LargeHouse';
@@ -30,6 +31,7 @@ const NightBuildings: FC = () => {
               roofColor="#514b6e"
               overrides={flip}
             />
+            <StreetLight left={200} />
             <SmallHouse wallColor="#1e1547" left={290} roofColor="#514b6e" />
             <MediumHouse wallColor="#1e1547" left={350} roofColor="#514b6e" />
             <MediumHouse wallColor="#1e1547" left={415} roofColor="#514b6e" />

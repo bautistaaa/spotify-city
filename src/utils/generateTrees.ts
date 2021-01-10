@@ -1,8 +1,15 @@
+import { CSSProperties } from 'react';
 import { TimeOfDay } from '../enums';
 import getRandomIntFromInterval from '../utils/getRandomIntFromInterval';
 
-const TEMPO_UPPER_BOUND = 75;
+export interface Tree {
+  height: number;
+  width: number;
+  left: number;
+  override: CSSProperties;
+}
 
+const TEMPO_UPPER_BOUND = 75;
 const overrides = {
   [TimeOfDay.Twilight]: {
     background:
@@ -13,9 +20,9 @@ const calculateGroundObjectCount = (tempo: number) => {
   const initialCount = Math.round((tempo / TEMPO_UPPER_BOUND) * 10);
   return getRandomIntFromInterval(initialCount, initialCount + 2);
 };
-
 const RANGE: [number, number] = [0, 800];
-const generateTrees = (tempo: number, timeOfDay: TimeOfDay) => {
+
+const generateTrees = (tempo: number, timeOfDay: TimeOfDay): Tree[] => {
   const treeCount = calculateGroundObjectCount(tempo);
   const trees = [];
 

@@ -1,0 +1,45 @@
+.container {
+  position: absolute;
+  bottom: 50px;
+  z-index: 10;
+  width: 35px;
+}
+.wrapper {
+  width: 2px;
+  height: 35px;
+  background: #1e1547;
+  &::after {
+    content: '';
+    position: absolute;
+    background: #1e1547;
+    height: 15px;
+    width: 1.25px;
+    transform: rotate(75deg);
+    left: 7px;
+    top: -7px;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    background: #d8db9a;
+    height: 3px;
+    width: 6px;
+    border-radius: 15px 5px 15px 5px;
+    left: 10px;
+    top: -2px;
+    z-index: 11;
+    transform: rotate(1deg);
+  }
+  .light {
+    position: absolute;
+    clip-path: polygon(37% 0, 52% 0, 79% 100%, 13% 100%);
+    background: rgb(230, 210, 40);
+    background: linear-gradient(
+      180deg,
+      rgb(216, 219, 154) 0%,
+      rgba(230, 210, 40, 0.20346050613496935) 100%
+    );
+    height: 100%;
+    width: 100%;
+  }
+}

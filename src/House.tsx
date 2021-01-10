@@ -1,13 +1,20 @@
 import { FC } from 'react';
 
-const House: FC<{
+export interface HouseProps {
   type: string;
   left: number;
   roofColor?: string;
   wallColor?: string;
   windowColor?: string;
   overrides?: object;
-}> = ({ type, left, roofColor, wallColor, overrides = {} }) => {
+}
+const House: FC<HouseProps> = ({
+  type,
+  left,
+  roofColor,
+  wallColor,
+  overrides = {},
+}) => {
   const style = {
     left,
     ...overrides,

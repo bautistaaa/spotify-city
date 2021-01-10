@@ -4,6 +4,15 @@
   margin: 0 auto;
   position: relative;
   overflow: hidden;
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    z-index: 0;
+  }
+
   .ground-wrapper {
     position: absolute;
     bottom: 0;

@@ -1,25 +1,20 @@
-import { ObjectType, TimeOfDay } from '../enums';
 import { useEffect, useState } from 'react';
+import { SceneInput } from '../types';
 import generateScene, { SceneInformation } from '../utils/generateScene';
 
-type Input = {
-  type: ObjectType;
-  timeOfDay: TimeOfDay;
-  tempo: number;
-  valence: number;
-};
 const useGeneratedScene = ({
   type,
   timeOfDay,
   tempo,
   valence,
-}: Input): SceneInformation => {
+}: SceneInput): SceneInformation => {
   const [state, setState] = useState<SceneInformation>({
     gradient: '',
     groundColor: '',
     objectsToRender: [],
     treesToRender: [],
     shadowsToRender: [],
+    planetOverrides: { top: '', left: '' },
   });
 
   useEffect(() => {

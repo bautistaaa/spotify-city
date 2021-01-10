@@ -1,4 +1,4 @@
-const getByWeight = <T>(data: [T, number][]) => {
+const getByWeight = <T>(data: [T, number][]): T | undefined => {
   // First, we loop the main dataset to count up the total weight.
   // We're starting the counter at one because the upper boundary
   // of Math.random() is exclusive.
@@ -26,6 +26,8 @@ const getByWeight = <T>(data: [T, number][]) => {
       return data[i][0];
     }
   }
+
+  return;
 };
 
 export default getByWeight;

@@ -4,6 +4,7 @@ import qs from 'query-string';
 import config from './config';
 import useLocalStorage from './hooks/useLocalStorage';
 import request from './services/request';
+import Cityscape from './components/CityScape';
 import DayMountains from './DayMountains';
 import NightMountains from './NightMountains';
 import NightBuildings from './NightBuildings';
@@ -93,11 +94,10 @@ const Home = () => {
   return (
     <div>
       <pre>{JSON.stringify(audioFeatures, null, 2)}</pre>
+      <Cityscape />
       <Playground
         audioFeatures={{ ...audioFeatures, type: ObjectType.mountains }}
       />
-      <TwilightBuildings />
-      <NightBuildings />
       <NightMountains />
       <TwilightMountains />
       <DayMountains />
