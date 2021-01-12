@@ -1,7 +1,8 @@
+import { FC } from 'react';
 import styled from 'styled-components';
 
-const BuildingFour = () => {
-  return <Wrapper />;
+const BuildingFour: FC<{ className?: string }> = ({ className }) => {
+  return <Wrapper className={className} />;
 };
 
 const Wrapper = styled.div`
@@ -13,5 +14,4 @@ const Wrapper = styled.div`
   background: #ad3c50;
 `;
 
-export default BuildingFour
-
+export default BuildingFour;

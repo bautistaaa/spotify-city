@@ -1,18 +1,11 @@
 import { useEffect, useState } from 'react';
+import styled from 'styled-components/macro';
 import { Redirect } from 'react-router-dom';
 import qs from 'query-string';
 import config from './config';
 import useLocalStorage from './hooks/useLocalStorage';
 import request from './services/request';
 import Cityscape from './components/CityScape';
-import DayMountains from './DayMountains';
-import NightMountains from './NightMountains';
-import NightBuildings from './NightBuildings';
-import TwilightMountains from './TwilightMountains';
-import TwilightBuildings from './TwilightBuildings';
-import Playground from './Playground';
-import './Home.scss';
-import { ObjectType } from './enums';
 
 export type AudioFeature = Omit<
   SpotifyApi.AudioFeaturesObject,
@@ -92,17 +85,26 @@ const Home = () => {
   }
 
   return (
-    <div>
-      <pre>{JSON.stringify(audioFeatures, null, 2)}</pre>
-      <Cityscape />
-      <Playground
-        audioFeatures={{ ...audioFeatures, type: ObjectType.mountains }}
-      />
-      <NightMountains />
-      <TwilightMountains />
-      <DayMountains />
-    </div>
+    <Wrapper>
+      <Row>
+        <Cityscape />
+      </Row>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+`;
+const Row = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
 
 export default Home;
