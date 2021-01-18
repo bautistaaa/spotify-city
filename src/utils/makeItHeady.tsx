@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import { ColorInfo } from '../constants/colors';
 import getRandomIntFromInterval from '../utils/getRandomIntFromInterval';
 
 export enum PhoneDistance {
@@ -19,10 +20,15 @@ const HEAD_SCALE_BY_DISTANCE: { [K in PhoneDistance]: [number, number] } = {
 const generateRandomFloat = (min: number, max: number) => {
   return Math.round(10 * (Math.random() * (max - min) + min)) / 10;
 };
-const makeItHeady = (amount: number, distance: PhoneDistance) => {
+const makeItHeady = (
+  amount: number,
+  distance: PhoneDistance,
+  colorInfo: ColorInfo
+) => {
   let phones = [];
   const bottomRanges = HEAD_BOTTOM_BY_DISTANCE[distance];
   const scales = HEAD_SCALE_BY_DISTANCE[distance];
+  const [, , headColor] = colorInfo;
   for (let i = 0; i < amount; i++) {
     const bottom = getRandomIntFromInterval(...bottomRanges);
     const left = getRandomIntFromInterval(0, 100);
@@ -36,6 +42,7 @@ const makeItHeady = (amount: number, distance: PhoneDistance) => {
         scale={scale}
         duration={duration}
         key={i}
+        headColor={headColor}
       />
     );
   }
@@ -48,6 +55,7 @@ const Head = styled.div<{
   bottom: number;
   scale: number;
   duration: number;
+  headColor: string;
 }>`
   position: absolute;
   left: ${({ left }) => `${left}%`};
@@ -57,9 +65,15 @@ const Head = styled.div<{
   width: 60px;
   border-radius: 100%;
   background: rgb(255, 255, 255);
+  //${({ color }) => color};
+  //background: linear-gradient(
+  //176deg,
+  //rgba(92, 78, 130, 0.4) 0%,
+  //rgba(22, 3, 40, 0) 57%
+  //);
   background: linear-gradient(
     176deg,
-    rgba(92, 78, 130, 0.4) 0%,
+    ${({ headColor }) => headColor} 0%,
     rgba(22, 3, 40, 0) 57%
   );
   animation: ${(props) => sway(props.scale)} ${(props) => `${props.duration}s`}

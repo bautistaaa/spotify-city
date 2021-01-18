@@ -1,4 +1,4 @@
-import React, { FC, TransitionEvent, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import Arrow from './Arrow';
 import {
@@ -17,11 +17,12 @@ import Shop from './Shop';
 import Complex from './Complex';
 import DonutShop from './DonutShop';
 import Garage from './Garage';
-import MiniShop from './MiniShop';
+import RecordShop from './RecordShop';
 import MusicHall from './MusicHall';
 import School from './School';
 import SignBuilding from './SignBuilding';
-import DonutShopScene from './Scenes/DonutShop';
+import DonutShopInterior from './Scenes/DonutShopInterior';
+import RecordShopInterior from './Scenes/RecordShop/RecordShopInterior';
 import MusicHallScene from './Scenes/MusicHallScene';
 import { SceneType } from '../../enums';
 import useRect from '../../hooks/useRect2';
@@ -80,7 +81,7 @@ const Cityscape: FC = () => {
               <Shop />
               <Complex />
               <BenchTwo />
-              <MiniShop />
+              <RecordShop onClick={() => setScene(SceneType.recordShop)} />
               <SignBuilding />
               <DonutShop onClick={() => setScene(SceneType.donutShop)} />
               <School />
@@ -111,7 +112,15 @@ const Cityscape: FC = () => {
     return (
       <>
         <button onClick={() => setScene(SceneType.city)}>Home</button>
-        <DonutShopScene />
+        <DonutShopInterior />
+      </>
+    );
+  }
+  if (scene === SceneType.recordShop) {
+    return (
+      <>
+        <button onClick={() => setScene(SceneType.city)}>Home</button>
+        <RecordShopInterior />
       </>
     );
   }

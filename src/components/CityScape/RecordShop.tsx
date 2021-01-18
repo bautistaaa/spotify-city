@@ -1,19 +1,13 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
 
-const MiniShop = () => {
+const RecordShop: FC<{
+  onClick: () => void;
+}> = ({ onClick }) => {
   return (
-    <Wrapper>
+    <Wrapper onClick={onClick}>
       <Roof />
       <RoofShadow />
-      <Billboard>
-        <Overlay />
-        <Video
-          src="//easportsassets-a.akamaihd.net/pulse.content.easports.com/web/OnlineAssets/easports/2017/easports17-video-reel.webm"
-          autoPlay
-          loop
-          muted
-        />
-      </Billboard>
       <Awning>
         <div></div>
         <div></div>
@@ -40,14 +34,6 @@ const Wrapper = styled.div`
   background: rgb(210, 210, 210);
   margin-left: 15px;
   flex-shrink: 0;
-`;
-const Vent = styled.div`
-  position: absolute;
-  height: 26px;
-  width: 6px;
-  background: #5b5b5b;
-  top: -28px;
-  left: 20px;
 `;
 const Roof = styled.div`
   position: absolute;
@@ -135,51 +121,5 @@ const Door = styled.div`
     background: #505050;
   }
 `;
-const Billboard = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: -89px;
-  left: 20px;
-  height: 73px;
-  width: 125px;
-  padding: 2px;
-  background: #dddbdb;
-  img {
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
-  }
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -16px;
-    height: 16px;
-    width: 3px;
-    background: #d2d2d2;
-  }
-
-  &::before {
-    left: 29%;
-  }
-  &::after {
-    right: 29%;
-  }
-`;
-const Video = styled.video`
-  width: 100% !important;
-  height: auto !important;
-`;
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 5;
-`;
-
-export default MiniShop;
+export default RecordShop;

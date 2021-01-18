@@ -1,33 +1,50 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
+import request from '../../../services/request';
+import config from '../../../config';
+import truncateStringByLimit from '../../../utils/truncateStringByLimit';
 
-const DonutShopScene: FC = () => {
+const DonutShopInterior: FC = () => {
+  const [recentlyPlayed, setRecentlyPlayed] = useState<
+    SpotifyApi.UsersRecentlyPlayedTracksResponse | undefined
+  >();
+  useEffect(() => {
+    const fetchRecentlyPlayedTracks = async () => {
+      const recentlyPlayedResponse: SpotifyApi.UsersRecentlyPlayedTracksResponse = await request(
+        `${config.apiUrl}/me/player/recently-played`
+      );
+      setRecentlyPlayed(recentlyPlayedResponse);
+    };
+
+    fetchRecentlyPlayedTracks();
+  }, []);
+  console.log(recentlyPlayed);
+
   return (
     <Wrapper>
       <Wall>
         <Sign>DONUT SHOP</Sign>
         <TopTracks>
-          <TopTracksTitle>Shop Playlist</TopTracksTitle>
-          <TopTrackItem>
-            <Artist>Death Cab For Cutie</Artist>
-            <Track>Summer Skin</Track>
-          </TopTrackItem>
-          <TopTrackItem>
-            <Artist>Death Cab For Cutie</Artist>
-            <Track>Summer Skin</Track>
-          </TopTrackItem>
-          <TopTrackItem>
-            <Artist>Death Cab For Cutie</Artist>
-            <Track>Summer Skin</Track>
-          </TopTrackItem>
-          <TopTrackItem>
-            <Artist>Death Cab For Cutie</Artist>
-            <Track>Summer Skin</Track>
-          </TopTrackItem>
-          <TopTrackItem>
-            <Artist>Death Cab For Cutie</Artist>
-            <Track>Summer Skin</Track>
-          </TopTrackItem>
+          <TopTracksTitle>Recently Played</TopTracksTitle>
+          {recentlyPlayed?.items.map((rp, i) => {
+            const {
+              track: {
+                name,
+                album: { images },
+                artists,
+                uri,
+              },
+            } = rp;
+            return (
+              <Track key={i} href={uri}>
+                <img width="32" height="32" src={images?.[2]?.url} alt="" />
+                <TrackInfo>
+                  <Artist>{artists?.[0]?.name}</Artist>
+                  <Title>{truncateStringByLimit(name, 15)}</Title>
+                </TrackInfo>
+              </Track>
+            );
+          })}
         </TopTracks>
         <Menu>
           <LeftMenu>
@@ -70,32 +87,77 @@ const DonutShopScene: FC = () => {
           </RightMenu>
         </Menu>
       </Wall>
-      <Shelf>
+      <Shelf top={70}>
         <CoffeeRow>
           <CoffeeCup />
           <CoffeeCup />
           <CoffeeCup />
         </CoffeeRow>
       </Shelf>
-      <ShelfTwo>
+      <Shelf top={120}>
         <CoffeeRow>
           <CoffeeCup />
           <CoffeeCup />
           <CoffeeCup />
         </CoffeeRow>
-      </ShelfTwo>
+      </Shelf>
+      <Shelf top={160}>
+        <CoffeeRow bottom={-32}>
+          <RotatedCoffeeCup />
+          <RotatedCoffeeCup />
+          <RotatedCoffeeCup />
+        </CoffeeRow>
+      </Shelf>
       <CounterRow>
         <GlassContainer>
           <GlassContainerShelf>
             <Plate>
-              <DonutOne />
-              <DonutTwo />
-              <DonutThree />
-              <DonutFour />
-              <DonutFive />
+              <Donut bottom={7} left={-3} icingColor="pink" />
+              <Donut bottom={7} right={-3} icingColor="pink" />
+              <Donut bottom={16} icingColor="pink" />
+              <Donut bottom={16} right={-2} icingColor="pink" />
+              <Donut bottom={25} right={8} icingColor="pink" />
+            </Plate>
+            <RedPlate>
+              <Cake>
+                <CakeLayer color="#eee32c" />
+                <CakeLayer color="#e6a9a9" />
+                <CakeLayer color="#eee32c" />
+                <CakeLayer color="#e6a9a9" />
+                <CakeLayer color="#eee32c" />
+              </Cake>
+            </RedPlate>
+            <Plate marginLeft={30}>
+              <Cake>
+                <CakeLayer color="#8fbe9b" />
+                <CakeLayer color="#e6a9a9" />
+                <CakeLayer color="#8fbe9b" />
+              </Cake>
             </Plate>
           </GlassContainerShelf>
-          <GlassContainerShelf />
+          <GlassContainerShelf>
+            <Plate>
+              <Donut bottom={7} left={-3} icingColor="#ffb252" />
+              <Donut bottom={7} right={-3} icingColor="#ffb252" />
+              <Donut bottom={16} icingColor="#ffb252" />
+              <Donut bottom={16} right={-2} icingColor="#ffb252" />
+              <Donut bottom={25} right={8} icingColor="#ffb252" />
+            </Plate>
+            <Plate marginLeft={25}>
+              <Donut bottom={7} left={-3} icingColor="#fb6c6c" />
+              <Donut bottom={7} right={-3} icingColor="#fb6c6c" />
+              <Donut bottom={16} icingColor="#fb6c6c" />
+              <Donut bottom={16} right={-2} icingColor="#fb6c6c" />
+              <Donut bottom={25} right={8} icingColor="#fb6c6c" />
+            </Plate>
+            <RedPlate>
+              <Donut bottom={7} left={-3} icingColor="#e05ed0" />
+              <Donut bottom={7} right={-3} icingColor="#fb6c6c" />
+              <Donut bottom={16} icingColor="#f5e88f" />
+              <Donut bottom={16} right={-2} icingColor="white" />
+              <Donut bottom={25} right={8} icingColor="#8fe2f5" />
+            </RedPlate>
+          </GlassContainerShelf>
         </GlassContainer>
         <CounterRightSide>
           <Monitor />
@@ -153,22 +215,32 @@ const Wrapper = styled.div`
     }
   }
 `;
-const Plate = styled.div`
-  position: relative;
-  bottom: 7px;
-  left: 10px;
+const BasePlate = styled.div`
   border-top: 10px solid white;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   width: 55px;
 `;
-const Donut = styled.div`
-  position: absolute;
+const Plate = styled(BasePlate)<{ marginLeft?: number }>`
+  position: relative;
   bottom: 7px;
+  margin-left: ${({ marginLeft }) => (marginLeft ? `${marginLeft}px` : '10px')};
+`;
+const Donut = styled.div<{
+  color?: string;
+  left?: number;
+  right?: number;
+  bottom?: number;
+  icingColor: string;
+}>`
+  position: absolute;
+  bottom: ${({ bottom }) => (bottom ? `${bottom}px` : '')};
+  right: ${({ right }) => (right ? `${right}px` : '')};
+  left: ${({ left }) => (left ? `${left}px` : '')};
+  background: ${({ color }) => color ?? '#dcb134'};
   height: 10px;
   width: 25px;
   border-radius: 4px;
-  background: #dcb134;
   border: 1px solid rgb(165 42 42 / 26%);
   overflow: hidden;
   z-index: -1;
@@ -178,25 +250,34 @@ const Donut = styled.div`
     top: 0;
     width: 100%;
     height: 5px;
-    background: pink;
+    background: ${({ icingColor }) => icingColor};
   }
 `;
-const DonutOne = styled(Donut)`
-  left: -3px;
+const Cake = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  border-radius: 4px;
+  position: relative;
+  top: -40px;
+  z-index: -1;
+  overflow: hidden;
 `;
-const DonutTwo = styled(Donut)`
-  right: -3px;
+const CakeLayer = styled.div<{ color: string }>`
+  flex: 1;
+  width: 100%;
+  background: ${({ color }) => color};
 `;
-const DonutThree = styled(Donut)`
-  bottom: 16px;
-`;
-const DonutFour = styled(Donut)`
-  bottom: 16px;
-  right: -2px;
-`;
-const DonutFive = styled(Donut)`
-  bottom: 25px;
-  right: 8px;
+const RedPlate = styled.div`
+  border-top: 7px solid #c17474;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  width: 50px;
+  margin-left: 20px;
+  position: relative;
+  bottom: 3px;
 `;
 const GlassContainer = styled.div`
   display: flex;
@@ -209,8 +290,26 @@ const GlassContainer = styled.div`
   z-index: 10;
   border: 10px solid #b98766;
   border-bottom: 35px solid #b98766;
+  position: relative;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background: rgb(255 255 255 / 33%);
+  }
+  &::before {
+    clip-path: polygon(47% 0, 68% 0, 30% 100%, 6% 100%);
+  }
+  &::after {
+    clip-path: polygon(72% 0, 76% 0, 40% 100%, 35% 100%);
+  }
 `;
 const GlassContainerShelf = styled.div`
+  display: flex;
   position: relative;
   height: 7px;
   width: 100%;
@@ -218,7 +317,6 @@ const GlassContainerShelf = styled.div`
 `;
 const Wall = styled.div`
   position: relative;
-  //background: #e9e5d9;
   width: 100%;
   height: 100%;
   background: linear-gradient(
@@ -267,24 +365,21 @@ const Menu = styled.div`
   width: 410px;
   height: 150px;
 `;
-const Shelf = styled.div`
+const Shelf = styled.div<{ top: number }>`
   position: absolute;
   right: 30px;
-  top: 70px;
+  top: ${({ top }) => `${top}px`};
   background: #825f3f;
   height: 10px;
   width: 140px;
   border-radius: 2px;
 `;
-const ShelfTwo = styled(Shelf)`
-  top: 130px;
-`;
-const CoffeeRow = styled.div`
+const CoffeeRow = styled.div<{ bottom?: number }>`
   display: flex;
   align-items: center;
   justify-content: space-around;
   position: absolute;
-  bottom: 10px;
+  bottom: ${({ bottom }) => (bottom ? `${bottom}px` : '10px')};
   width: 100%;
   padding: 0 9px;
 `;
@@ -318,6 +413,9 @@ const CoffeeCup = styled.div`
     border-bottom: 4px solid #394e57;
     border-bottom-left-radius: 60%;
   }
+`;
+const RotatedCoffeeCup = styled(CoffeeCup)`
+  transform: rotate(45deg);
 `;
 const BaseSubMenu = styled.div`
   flex: 1;
@@ -361,10 +459,10 @@ const Sign = styled.div`
 const TopTracks = styled.div`
   position: absolute;
   top: 10px;
-  left: 20px;
+  left: 15px;
   background: #323234;
   border: 5px solid #d09f7f;
-  width: 200px;
+  width: 230px;
   height: 300px;
   padding: 10px;
   color: #ccccce;
@@ -372,17 +470,8 @@ const TopTracks = styled.div`
 `;
 const TopTracksTitle = styled.p`
   margin: 0 0 10px;
-  font-size: 19px;
-`;
-const TopTrackItem = styled.div`
-  margin-bottom: 5px;
-`;
-const Artist = styled.p`
-  font-size: 14px;
-  font-weight: 600;
-`;
-const Track = styled.p`
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: 500;
 `;
 const CounterRow = styled.div`
   display: flex;
@@ -400,7 +489,7 @@ const CounterTop = styled.div`
 `;
 const CounterTopShadow = styled.div`
   position: absolute;
-  top: 27px;
+  top: 26px;
   background: rgba(0, 0, 0, 0.2);
   height: 15px;
   width: 100%;
@@ -501,6 +590,8 @@ const CushionBase = styled.div`
   background: #2a253f;
   width: 130px;
   height: 12px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
   &::before {
     background: #2a253f;
     content: '';
@@ -518,6 +609,15 @@ const Leg = styled.div`
   position: relative;
   left: 45%;
   top: 15px;
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: 50px;
+    left: -23px;
+    width: 60px;
+    height: 7px;
+    background: #e7e5d9;
+  }
 `;
 const ChairBase = styled.div`
   background: #e7e5d9;
@@ -525,9 +625,13 @@ const ChairBase = styled.div`
   height: 13px;
   position: relative;
   top: 10px;
-  left: 24px;
-}
-
+  left: 27px;
+  border-left: 40px solid #e7e5d9;
+  border-right: 40px solid #e7e5d9;
+  border-bottom: 7px solid transparent;
+  border-top: 10px solid #e7e5d9;
+  border-top-left-radius: 60%;
+  border-top-right-radius: 60%;
 `;
 const Floor = styled.div`
   background: #67462d;
@@ -537,4 +641,24 @@ const Floor = styled.div`
   width: 100%;
   height: 140px;
 `;
-export default DonutShopScene;
+const Track = styled.a`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
+  text-decoration: none;
+  color: #ccccce;
+  margin-bottom: 5px;
+`;
+const TrackInfo = styled.div`
+  margin-left: 20px;
+  text-align: left;
+`;
+const Artist = styled.div`
+  font-size: 13px;
+  font-weight: 500;
+`;
+const Title = styled.div`
+  font-size: 12px;
+`;
+export default DonutShopInterior;

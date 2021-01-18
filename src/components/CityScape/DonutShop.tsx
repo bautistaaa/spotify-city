@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const DonutShop: FC<{
   onClick: () => void;
 }> = ({ onClick }) => {
+
   return (
     <Wrapper onClick={onClick}>
       <Roof>

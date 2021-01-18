@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components';
+import { ColorInfo } from '../constants/colors';
 import getRandomIntFromInterval from '../utils/getRandomIntFromInterval';
 
 export enum PhoneDistance {
@@ -19,10 +20,16 @@ const PHONE_SCALE_BY_DISTANCE: { [K in PhoneDistance]: [number, number] } = {
 const generateRandomFloat = (min: number, max: number) => {
   return Math.round(10 * (Math.random() * (max - min) + min)) / 10;
 };
-const makeItPhony = (amount: number, distance: PhoneDistance) => {
+const makeItPhony = (
+  amount: number,
+  distance: PhoneDistance,
+  colorInfo: ColorInfo
+) => {
   let phones = [];
   const bottomRanges = PHONE_BOTTOM_BY_DISTANCE[distance];
   const scales = PHONE_SCALE_BY_DISTANCE[distance];
+  const [phoneColor, glow] = colorInfo;
+
   for (let i = 0; i < amount; i++) {
     const bottom = getRandomIntFromInterval(...bottomRanges);
     const left = getRandomIntFromInterval(0, 100);
@@ -35,6 +42,8 @@ const makeItPhony = (amount: number, distance: PhoneDistance) => {
         left={left}
         scale={scale}
         duration={duration}
+        phoneColor={phoneColor}
+        glow={glow}
         key={i}
       />
     );
@@ -48,16 +57,17 @@ const Phone = styled.div<{
   bottom: number;
   scale: number;
   duration: number;
+  phoneColor: string;
+  glow: string;
 }>`
   position: absolute;
   left: ${({ left }) => `${left}%`};
   bottom: ${({ bottom }) => `${bottom}%`};
   height: 70px;
   width: 40px;
-  background: #aca3e2;
+  background: ${({ phoneColor }) => phoneColor};
   border-radius: 2px;
-  //transform: ${({ scale }) => `scale(${scale}) translateX(10px)`};
-  box-shadow: 3px 0px 190px 80px rgba(153, 142, 210, 1);
+  box-shadow: 3px 0px 190px 20px ${({ glow }) => glow};
   animation: ${(props) => sway(props.scale)} ${(props) => `${props.duration}s`}
     infinite ease-in-out;
   &::before {

@@ -104,13 +104,14 @@ const Marquee = styled.div`
   animation: neon 1.5s ease-in-out infinite alternate;
   @keyframes neon {
     from {
-    text-shadow: 0 0 10px #ddd, 0 0 20px #ddd, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+      text-shadow: 0 0 10px #ddd, 0 0 20px #ddd, 0 0 30px #fff, 0 0 40px #ff1177,
+        0 0 70px #ff1177, 0 0 80px #ff1177, 0 0 100px #ff1177, 0 0 150px #ff1177;
+    }
+    to {
+      text-shadow: 0 0 5px #fff, 0 0 10px #ddd, 0 0 15px #ddd, 0 0 20px #ff1177,
+        0 0 35px #ff1177, 0 0 40px #ff1177, 0 0 50px #ff1177, 0 0 75px #ff1177;
+    }
   }
-  to {
-    text-shadow: 0 0 5px #fff, 0 0 10px #ddd, 0 0 15px #ddd, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
-  }
-}
-}
 `;
 
 export default MusicHall;

@@ -1,14 +1,14 @@
-export const KEY_HUES = [
-  'red',
-  'red',
-  'yellow',
-  'yellow',
-  'lightBlue',
-  'darkRed',
-  'brightBlue',
-  'orangePink',
-  'orangePink',
-  'green',
-  'green',
-  'lightBlue',
+export type ColorInfo = [phoneColor: string, glow: string, headColor: string];
+export const KEY_HUES: ColorInfo[] = [
+  ['red', 'red', 'red'],
+  ['red', 'red', 'red'],
+  ['#dbdb43', '#e9e985', '#dbdb95'],
+  ['#dbdb43', '#e9e985', '#dbdb95'],
+  ['#5796c2', '#669ac8', '#4285c0'],
+  ['#ce3451', '#df6a80', '#c66a6a'],
+  ['#5b5bae', '#5c5cdd', '#4444b2'],
+  ['#f17949', 'LightSalmon', '#ffa885'],
+  ['#f17949', 'LightSalmon', '#ffa885'],
+  ['#389738', '#a6e1a6', '#7ec27e'],
+  ['#6cb46c', 'LightGreen', '#5fae5f'],
 ];
