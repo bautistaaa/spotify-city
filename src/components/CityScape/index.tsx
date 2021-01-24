@@ -21,9 +21,9 @@ import RecordShop from './RecordShop';
 import MusicHall from './MusicHall';
 import School from './School';
 import SignBuilding from './SignBuilding';
-import DonutShopInterior from './Scenes/DonutShopInterior';
-import RecordShopInterior from './Scenes/RecordShop/RecordShopInterior';
-import MusicHallScene from './Scenes/MusicHallScene';
+import DonutShopInterior from './Scenes/DonutShop';
+import RecordShopInterior from './Scenes/RecordShop/index';
+import MusicHallScene from './Scenes/MusicHall';
 import { SceneType } from '../../enums';
 import useRect from '../../hooks/useRect2';
 
@@ -152,7 +152,7 @@ const Wrapper = styled.div<{ pixelsToMove: number }>`
   margin: 0 auto;
   position: relative;
   transform: ${({ pixelsToMove }) => `translateX(${pixelsToMove}px);`};
-  transition: transform .3s ease-in;
+  transition: transform 0.3s ease-in;
 `;
 const PreviousArrowContainer = styled.div`
   position: absolute;
@@ -180,7 +180,7 @@ const BenchOne = styled(BaseBench)`
   left: 105px;
 `;
 const BenchTwo = styled(BaseBench)`
-  left: 265px;
+  left: 565px;
 `;
 const BenchThree = styled(BaseBench)`
   right: 10px;
@@ -190,7 +190,7 @@ const BirdOne = styled(BaseBird)`
   top: 30px;
   right: 0;
   transform: translateX(20px);
-  animation: fly 15s infinite ease;
+  animation: fly 19s infinite ease;
 
   @keyframes fly {
     0% {
@@ -198,7 +198,7 @@ const BirdOne = styled(BaseBird)`
     }
     42%,
     100% {
-      transform: translateX(-1100px) translateY(200px);
+      transform: translateX(-1520px) translateY(200px);
     }
   }
 `;
@@ -208,7 +208,7 @@ const BirdTwo = styled(BaseBird)`
   left: 0;
   transform: translateX(-20px) scaleX(-1);
   z-index: 10;
-  animation: flyBirdTwo 13s infinite linear 4s;
+  animation: flyBirdTwo 15s infinite linear 4s;
 
   @keyframes flyBirdTwo {
     0% {
@@ -216,7 +216,7 @@ const BirdTwo = styled(BaseBird)`
     }
     45%,
     100% {
-      transform: translateX(1100px) translateY(-200px);
+      transform: translateX(1520px) translateY(-200px);
     }
   }
 `;

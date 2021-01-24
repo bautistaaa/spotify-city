@@ -10,8 +10,6 @@ const TopTracksWall: FC<{
 }> = React.memo(({ setCurrentSelectedTrack }) => {
   const { topTracks } = useAppContext();
   if (!topTracks) return null;
-  //track.name
-  //arist[0].name
   return (
     <Wall>
       <TopTracksSign>
@@ -53,7 +51,7 @@ const Wall = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  background: #fce1ae;
+  background: #5d9caa;
   width: 100%;
   flex: 1;
   padding: 10px 10px 30px;
@@ -71,7 +69,7 @@ const PosterOverlay = styled.div`
   right: 0;
   left: 0;
   bottom: 0;
-  opacity: 0.3;
+  opacity: 0.2;
   transition: opacity 0.3s;
   z-index: 10;
 `;

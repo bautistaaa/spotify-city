@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
-import request from '../../../services/request';
-import config from '../../../config';
-import truncateStringByLimit from '../../../utils/truncateStringByLimit';
+import request from '../../../../services/request';
+import config from '../../../../config';
+import truncateStringByLimit from '../../../../utils/truncateStringByLimit';
 
 const DonutShopInterior: FC = () => {
   const [recentlyPlayed, setRecentlyPlayed] = useState<

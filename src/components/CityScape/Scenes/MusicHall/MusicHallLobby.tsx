@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import styled from 'styled-components/macro';
-import { useAppContext } from '../../../AppContext';
-import { MusicHallSceneType, TrackData } from './MusicHallScene';
+import { useAppContext } from '../../../../AppContext';
+import { MusicHallSceneType, TrackData } from '.';
 
 const MusicHallLobby: FC<{
   setScene: React.Dispatch<React.SetStateAction<MusicHallSceneType>>;

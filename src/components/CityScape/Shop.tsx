@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   width: 100px;
   height: 130px;
   position: relative;
-  background: rgb(194, 110, 141);
+  background: #d37799;
   margin-left: 10px;
   flex-shrink: 0;
 `;

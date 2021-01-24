@@ -59,7 +59,7 @@ const RoofShadow = styled.div`
 `;
 const ThirdFloor = styled.div`
   position: relative;
-  background: rgb(113, 147, 181);
+  background: #7da1c5;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -69,14 +69,14 @@ const ThirdFloor = styled.div`
 `;
 const SecondFloor = styled.div`
   position: relative;
-  background: rgb(113, 147, 181);
+  background: #7da1c5;
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 55px;
 `;
 const FirstFloor = styled.div`
-  background: rgb(113, 147, 181);
+  background: #7da1c5;
 `;
 const BaseLevel = styled.div`
   display: flex;

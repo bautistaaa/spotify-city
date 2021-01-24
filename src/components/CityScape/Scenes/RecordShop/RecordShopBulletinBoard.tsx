@@ -7,6 +7,7 @@ interface Position {
   left: number;
   top: number;
 }
+
 const RecordShopBulletinBoard: FC = () => {
   return (
     <Wrapper>
@@ -15,7 +16,7 @@ const RecordShopBulletinBoard: FC = () => {
         <PaperLeftShadow />
         <PaperRightShadow />
       </PaperContainer>
-      <PaperContainer>
+      <PaperContainer position={{ top: 0, right: 20 }}>
         <PostIt />
         <PaperLeftShadow />
         <PaperRightShadow />
@@ -39,8 +40,12 @@ const Wrapper = styled.div`
 `;
 const PaperContainer = styled.div<{ position: Partial<Position> }>`
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: ${({ position: { top } }) => (top !== undefined ? `${top}px` : '')};
+  right: ${({ position: { right } }) =>
+    right !== undefined ? `${right}px` : ''};
+  left: ${({ position: { left } }) => (left !== undefined ? `${left}px` : '')};
+  bottom: ${({ position: { bottom } }) =>
+    bottom !== undefined ? `${bottom}px` : ''};
 `;
 const Paper = styled.div`
   position: relative;

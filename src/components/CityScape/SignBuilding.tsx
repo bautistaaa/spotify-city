@@ -6,12 +6,11 @@ const SignBuilding = () => {
       <Roof />
       <Top>
         <Sign>
+          <div>H</div>
+          <div>O</div>
           <div>T</div>
           <div>E</div>
-          <div>S</div>
-          <div>T</div>
-          <div>T</div>
-          <div>T</div>
+          <div>L</div>
         </Sign>
         <Row>
           <Balcony>

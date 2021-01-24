@@ -78,6 +78,7 @@ const Head = styled.div<{
   );
   animation: ${(props) => sway(props.scale)} ${(props) => `${props.duration}s`}
     infinite ease-in-out;
+  z-index: 110;
 `;
 
 const sway = (scale: number) => keyframes`

@@ -10,12 +10,13 @@ export enum PhoneDistance {
 const PHONE_BOTTOM_BY_DISTANCE: { [K in PhoneDistance]: [number, number] } = {
   [PhoneDistance.Far]: [68, 75],
   [PhoneDistance.Close]: [40, 60],
-  [PhoneDistance.Closest]: [15, 30],
+  [PhoneDistance.Closest]: [10, 20],
 };
 const PHONE_SCALE_BY_DISTANCE: { [K in PhoneDistance]: [number, number] } = {
   [PhoneDistance.Far]: [0.2, 0.4],
   [PhoneDistance.Close]: [0.6, 0.9],
-  [PhoneDistance.Closest]: [1, 1.3],
+  [PhoneDistance.Closest]: [0.6, 0.9],
+  //[PhoneDistance.Closest]: [1, 1.3],
 };
 const generateRandomFloat = (min: number, max: number) => {
   return Math.round(10 * (Math.random() * (max - min) + min)) / 10;
@@ -23,7 +24,8 @@ const generateRandomFloat = (min: number, max: number) => {
 const makeItPhony = (
   amount: number,
   distance: PhoneDistance,
-  colorInfo: ColorInfo
+  colorInfo: ColorInfo,
+  duration: number
 ) => {
   let phones = [];
   const bottomRanges = PHONE_BOTTOM_BY_DISTANCE[distance];
@@ -33,7 +35,6 @@ const makeItPhony = (
   for (let i = 0; i < amount; i++) {
     const bottom = getRandomIntFromInterval(...bottomRanges);
     const left = getRandomIntFromInterval(0, 100);
-    const duration = getRandomIntFromInterval(3, 6);
     const scale = generateRandomFloat(...scales);
 
     phones.push(
@@ -68,8 +69,11 @@ const Phone = styled.div<{
   background: ${({ phoneColor }) => phoneColor};
   border-radius: 2px;
   box-shadow: 3px 0px 190px 20px ${({ glow }) => glow};
+  transform: scale(${({ scale }) => scale});
   animation: ${(props) => sway(props.scale)} ${(props) => `${props.duration}s`}
-    infinite ease-in-out;
+    infinite;
+  z-index: 100;
+  opacity: 0.7;
   &::before {
     content: '';
     position: absolute;

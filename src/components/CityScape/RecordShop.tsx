@@ -6,6 +6,9 @@ const RecordShop: FC<{
 }> = ({ onClick }) => {
   return (
     <Wrapper onClick={onClick}>
+      <Billboard>
+        <img src="headphones.svg" alt="store logo" />
+      </Billboard>
       <Roof />
       <RoofShadow />
       <Awning>
@@ -31,13 +34,13 @@ const Wrapper = styled.div`
   width: 175px;
   height: 90px;
   position: relative;
-  background: rgb(210, 210, 210);
+  background: #6fbed4;
   margin-left: 15px;
   flex-shrink: 0;
 `;
 const Roof = styled.div`
   position: absolute;
-  background: #9a9a9a;
+  background: #eaeaea;
   width: 185px;
   height: 12px;
   top: -2px;
@@ -119,6 +122,42 @@ const Door = styled.div`
     width: 3px;
     border-radius: 3px;
     background: #505050;
+  }
+`;
+const Billboard = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -96px;
+  left: 20px;
+  height: 80px;
+  width: 125px;
+  padding: 2px;
+  background: #2f86af;
+  color: white;
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: 4px;
+  img {
+    width: 50px;
+    fill: white;
+  }
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -16px;
+    height: 16px;
+    width: 3px;
+    background: #eaeaea;
+  }
+
+  &::before {
+    left: 29%;
+  }
+  &::after {
+    right: 29%;
   }
 `;
 

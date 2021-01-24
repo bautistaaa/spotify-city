@@ -3,13 +3,6 @@ import styled from 'styled-components/macro';
 const Garage = () => {
   return (
     <Wrapper>
-      <Billboard>
-        <Overlay />
-        <img
-          src="https://upload.wikimedia.org/wikipedia/en/thumb/d/d5/Ariana_Grande_My_Everything_2014_album_artwork.png/220px-Ariana_Grande_My_Everything_2014_album_artwork.png"
-          alt=""
-        />
-      </Billboard>
       <Awning />
       <AwningShadow />
       <Door />
@@ -27,7 +20,7 @@ const Wrapper = styled.div`
   height: 90px;
   position: relative;
   margin-left: 10px;
-  background: rgb(192, 188, 173);
+  background: #dfcf92;
   flex-shrink: 0;
 `;
 const Light = styled.div`
@@ -144,48 +137,6 @@ const Sign = styled.div`
     width: 93%;
     height: 7px;
   }
-`;
-const Billboard = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: -96px;
-  left: 20px;
-  height: 80px;
-  width: 125px;
-  padding: 2px;
-  background: #dddbdb;
-  img {
-    object-fit: cover;
-    height: 100%;
-    width: 100%;
-  }
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -16px;
-    height: 16px;
-    width: 3px;
-    background: #8c5618;
-  }
-
-  &::before {
-    left: 29%;
-  }
-  &::after {
-    right: 29%;
-  }
-`;
-const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.3);
-  z-index: 5;
 `;
 
 export default Garage;

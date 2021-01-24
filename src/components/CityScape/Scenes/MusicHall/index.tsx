@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import MusicHallCrowd from './MusicHallCrowd';
 import MusicHallLobby from './MusicHallLobby';
-import request from '../../../services/request';
-import config from '../../../config';
+import request from '../../../../services/request';
+import config from '../../../../config';
 
 export enum MusicHallSceneType {
   'lobby',

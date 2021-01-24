@@ -85,7 +85,7 @@ const Shelf = styled.div`
   position: relative;
   height: 170px;
   width: 100%;
-  background: #ead1a3;
+  background: #fff6e4;
   padding: 10px 10px 0;
   z-index: 2;
   &::before {
@@ -118,7 +118,7 @@ const PosterOverlay = styled.div`
   right: 0;
   left: 0;
   bottom: 0;
-  opacity: 0.3;
+  opacity: 0.2;
   transition: opacity 0.3s;
   z-index: 10;
 `;
