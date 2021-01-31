@@ -1,4 +1,4 @@
-import { AudioFeature } from './Home';
+import { AudioFeature } from './AppContext';
 
 export const ENERGY_CHANGED = 'energyChanged';
 export const KEY_CHANGED = 'keyChanged';
@@ -44,4 +44,3 @@ export function reducer(state: AudioFeature, action: Action) {
       throw new Error();
   }
 }
-

@@ -1,8 +1,9 @@
+import {FC} from 'react';
 import styled from 'styled-components';
 import { Building } from './BuildingOne';
 
-const BuildingSix = () => {
-  return <Wrapper />;
+const BuildingSix: FC<{ background: string }> = ({ background }) => {
+  return <Wrapper background={background} />;
 };
 
 const Wrapper = styled(Building)`

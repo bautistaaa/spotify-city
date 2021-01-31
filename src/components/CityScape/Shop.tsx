@@ -1,34 +1,71 @@
-import {FC} from 'react';
+import { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const Shop: FC = () => {
+interface ColorPalette {
+  building: string;
+  awning: string;
+  awningFront: string;
+  roof: string;
+  window: string;
+  door: string;
+}
+const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
+  [TimeOfDay.Night]: {
+    building: '#a85f7a',
+    awning: '#71364b',
+    awningFront: '#90405d',
+    roof: '#90405d',
+    window: '#d0d39b',
+    door: '#76798b',
+  },
+  [TimeOfDay.Twilight]: {
+    building: '#d37799',
+    awning: '#88405a',
+    awningFront: '#a24869',
+    roof: '#88405a',
+    window: '#8e91a6',
+    door: '#8e91a6',
+  },
+  [TimeOfDay.Day]: {
+    building: '#da9ab1',
+    awning: '#a5506e',
+    awningFront: '#b3627f',
+    roof: '#a5506e',
+    window: '#abaec9',
+    door: '#abaec9',
+  },
+};
+
+const Shop: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+  const colors = COLOR_PALETTE[timeOfDay];
   return (
-    <Wrapper>
-      <Roof />
+    <Wrapper background={colors.building}>
+      <Roof background={colors.roof} />
       <RoofShadow />
-      <TopWindow />
-      <Awning />
+      <TopWindow background={colors.window} />
+      <Awning bottomColor={colors.awningFront} topColor={colors.awning} />
       <AwningShadow />
-      <BottomWindow />
+      <BottomWindow background={colors.door} />
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ background: string }>`
   width: 100px;
   height: 130px;
   position: relative;
-  background: #d37799;
+  background: ${({ background }) => background};
   margin-left: 10px;
   flex-shrink: 0;
 `;
-const Roof = styled.div`
+const Roof = styled.div<{ background: string }>`
   position: absolute;
-  background: #88405a;
   width: 110px;
   height: 12px;
   top: -2px;
   left: -5px;
+  background: ${({ background }) => background};
   z-index: 4;
 `;
 const RoofShadow = styled.div`
@@ -41,16 +78,15 @@ const RoofShadow = styled.div`
   left: 0px;
   z-index: 3;
 `;
-const TopWindow = styled.div`
+const TopWindow = styled.div<{ background: string }>`
   position: absolute;
-    width: 70px;
-    height: 50px;
-    background: #9598b1;
-    top: 5px;
-    left: 14px;
-    border: 2px solid #505050;
-    z-index: 2;
-}
+  width: 70px;
+  height: 50px;
+  background: ${({ background }) => background};
+  top: 5px;
+  left: 14px;
+  border: 2px solid #505050;
+  z-index: 2;
   &::before {
     content: '';
     position: absolute;
@@ -71,11 +107,11 @@ const TopWindow = styled.div`
     bottom: 0;
   }
 `;
-const BottomWindow = styled.div`
+const BottomWindow = styled.div<{ background: string }>`
   position: absolute;
   width: 70px;
   height: 50px;
-  background: #9598b1;
+  background: ${({ background }) => background};
   bottom: 0;
   left: 14px;
   border: 2px solid #505050;
@@ -100,11 +136,11 @@ const BottomWindow = styled.div`
     bottom: 15px;
   }
 `;
-const Awning = styled.div`
+const Awning = styled.div<{ bottomColor: string; topColor: string }>`
   position: absolute;
   width: 86px;
   height: 12px;
-  background: #a24869;
+  background: ${({ bottomColor }) => bottomColor};
   bottom: 45px;
   left: 7px;
   z-index: 5;
@@ -113,7 +149,7 @@ const Awning = styled.div`
     position: absolute;
     width: 56px;
     top: -13px;
-    border-bottom: 13px solid #88405a;
+    border-bottom: ${({ topColor }) => `13px solid ${topColor}`};
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
   }

@@ -1,5 +1,4 @@
 import { FC, useRef, useReducer } from 'react';
-import { AudioFeature } from './Home';
 import Moon from './Moon';
 import Sliders from './Sliders';
 import Sun from './Sun';
@@ -16,9 +15,13 @@ import { BuildingsMetaData } from './utils/generateBuildings';
 import { MountainsMetaData } from './utils/generateMountains';
 
 import './Playground.scss';
+import { AudioFeature } from './AppContext';
 
 const Playground: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
-  const [state, dispatch] = useReducer(reducer, audioFeatures);
+  const [state, dispatch] = useReducer(reducer, {
+    audioFeatures,
+    type: ObjectType.mountains,
+  });
   const { tempo, type, valence } = state;
   const timeOfDay = getTimeOfDay(valence);
 

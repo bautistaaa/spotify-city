@@ -1,11 +1,69 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const SignBuilding = () => {
+interface ColorPalette {
+  building: string;
+  roof: string;
+  trim: string;
+  window: string;
+  windowFrame: string;
+  groundFloor: string;
+  groundFloorDoor: string;
+  groundFloorDoorFrame: string;
+  groundFloorWindow: string;
+  groundFloorWindowFrame: string;
+}
+const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
+  [TimeOfDay.Night]: {
+    building: '#ac7274',
+    roof: '#1a0303',
+    trim: '#5c5666',
+    window: '#d0d39b',
+    windowFrame: '#1a0303',
+    groundFloor: '#cfa39c',
+    groundFloorDoor: '#1a0303',
+    groundFloorDoorFrame: '#c0787b',
+    groundFloorWindow: '#1a0303',
+    groundFloorWindowFrame: '#c0787b',
+  },
+  [TimeOfDay.Twilight]: {
+    building: '#ac7274',
+    roof: '#1a0303',
+    trim: '#5c5666',
+    window: '#1a0303',
+    windowFrame: '#d7aaa2',
+    groundFloor: '#cfa39c',
+    groundFloorDoor: '#1a0303',
+    groundFloorDoorFrame: '#c0787b',
+    groundFloorWindow: '#1a0303',
+    groundFloorWindowFrame: '#c0787b',
+  },
+  [TimeOfDay.Day]: {
+    building: '#d29da0',
+    roof: '#1a0303',
+    trim: '#5c5666',
+    window: '#1a0303',
+    windowFrame: '#f0d1cc',
+    groundFloor: '#f5cbc4',
+    groundFloorDoor: '#1a0303',
+    groundFloorDoorFrame: '#df888c',
+    groundFloorWindow: '#1a0303',
+    groundFloorWindowFrame: '#df888c',
+  },
+};
+
+const SignBuilding: FC<{
+  timeOfDay: TimeOfDay;
+  onClick: () => void;
+}> = ({ timeOfDay, onClick }) => {
+  const colors = COLOR_PALETTE[timeOfDay];
+
   return (
-    <Wrapper>
-      <Roof />
-      <Top>
-        <Sign>
+    <Wrapper onClick={onClick}>
+      <Roof background={colors.roof} />
+      <Top background={colors.building}>
+        <Sign timeOfDay={timeOfDay}>
           <div>H</div>
           <div>O</div>
           <div>T</div>
@@ -19,36 +77,16 @@ const SignBuilding = () => {
             <Rail />
             <Rail />
           </Balcony>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
             </WindowGlass>
           </WindowFrame>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
-            </WindowGlass>
-          </WindowFrame>
-        </Row>
-        <Row>
-          <Balcony hasLadder>
-            <Rail />
-            <Rail />
-            <Rail />
-            <Rail />
-          </Balcony>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
-            </WindowGlass>
-          </WindowFrame>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
             </WindowGlass>
           </WindowFrame>
         </Row>
@@ -59,16 +97,16 @@ const SignBuilding = () => {
             <Rail />
             <Rail />
           </Balcony>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
             </WindowGlass>
           </WindowFrame>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
             </WindowGlass>
           </WindowFrame>
         </Row>
@@ -79,25 +117,51 @@ const SignBuilding = () => {
             <Rail />
             <Rail />
           </Balcony>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
             </WindowGlass>
           </WindowFrame>
-          <WindowFrame>
-            <WindowGlass>
-              <WindowSpine />
-              <WindowSpine />
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
+            </WindowGlass>
+          </WindowFrame>
+        </Row>
+        <Row>
+          <Balcony hasLadder>
+            <Rail />
+            <Rail />
+            <Rail />
+            <Rail />
+          </Balcony>
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
+            </WindowGlass>
+          </WindowFrame>
+          <WindowFrame background={colors.windowFrame}>
+            <WindowGlass background={colors.window}>
+              <WindowSpine background={colors.windowFrame} />
+              <WindowSpine background={colors.windowFrame} />
             </WindowGlass>
           </WindowFrame>
         </Row>
       </Top>
-      <Bottom>
-        <Trim />
-        <Door />
-        <Garage>
-          <GarageDoor />
+      <Bottom background={colors.groundFloor}>
+        <Trim background={colors.trim} />
+        <Door
+          background={colors.groundFloorDoor}
+          doorFrame={colors.groundFloorWindowFrame}
+        />
+        <Garage background={colors.groundFloorWindowFrame}>
+          <GarageDoor
+            background={colors.groundFloorWindow}
+            doorFrame={colors.groundFloorWindowFrame}
+          />
         </Garage>
       </Bottom>
     </Wrapper>
@@ -111,30 +175,29 @@ const Wrapper = styled.div`
   margin-left: 15px;
   flex-shrink: 0;
 `;
-const Roof = styled.div`
+const Roof = styled.div<{ background: string }>`
   width: 128px;
   height: 20px;
-  background: #1a0303;
+  background: ${({ background }) => background};
   position: absolute;
   left: -4px;
   top: -15px;
   border-radius: 3px;
 }
 `;
-const Top = styled.div`
+const Top = styled.div<{ background: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
   width: 120px;
   padding-top: 15px;
-  background: #d29da0;
+  background: ${({ background }) => background};
 `;
-const Bottom = styled.div`
-  position: relative;
+const Bottom = styled.div<{ background: string }>`
+  background: ${({ background }) => background};
   width: 100%;
   height: 60px;
-  background: #f5cbc4;
 `;
 const Row = styled.div`
   position: relative;
@@ -176,34 +239,34 @@ const Rail = styled.div`
   height: 1px;
   background: #1a0303;
 `;
-const WindowFrame = styled.div`
+const WindowFrame = styled.div<{ background: string }>`
   position: relative;
-  background: #f0d1cc;
+  background: ${({ background }) => background};
   height: 36px;
   width: 26px;
   padding: 3px;
 `;
-const WindowGlass = styled.div`
+const WindowGlass = styled.div<{ background: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   width: 100%;
   height: 100%;
-  background: #1a0303;
+  background: ${({ background }) => background};
 `;
-const WindowSpine = styled.div`
+const WindowSpine = styled.div<{ background: string }>`
   width: 100%;
   height: 2px;
-  background: #f0d1cc;
+  background: ${({ background }) => background};
   margin-bottom: 4px;
 `;
-const Door = styled.div`
+const Door = styled.div<{ background: string; doorFrame: string }>`
   position: absolute;
   width: 29px;
   height: 43px;
   bottom: 0;
   left: 10px;
-  background: #df888c;
+  background: ${({ doorFrame }) => doorFrame};
   &::before {
     content: '';
     position: absolute;
@@ -211,27 +274,27 @@ const Door = styled.div`
     height: 40px;
     bottom: 0;
     left: 3px;
-    background: #1a0303;
+    background: ${({ background }) => background};
   }
 `;
-const Garage = styled.div`
+const Garage = styled.div<{ background: string }>`
   position: absolute;
   width: 60px;
   height: 43px;
   bottom: 0;
   right: 5px;
-  background: #df888c;
+  background: ${({ background }) => background};
   padding: 3px 3px 0;
 `;
-const GarageDoor = styled.div`
+const GarageDoor = styled.div<{ background: string; doorFrame: string }>`
   width: 100%;
   height: 100%;
-  background: #1a0303;
+  background: ${({ background }) => background};
   &::before,
   &::after {
     content: '';
     position: absolute;
-    background: #df888c;
+    background: ${({ doorFrame }) => doorFrame};
   }
   &::before {
     left: 48%;
@@ -245,14 +308,14 @@ const GarageDoor = styled.div`
     height: 2px;
   }
 `;
-const Trim = styled.div`
+const Trim = styled.div<{ background: string }>`
   height: 3px;
   width: 100%;
   position: absolute;
-  background: #5c5666;
+  background: ${({ background }) => background};
   top: 0;
 `;
-const Sign = styled.div`
+const Sign = styled.div<{ timeOfDay: TimeOfDay }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -268,6 +331,9 @@ const Sign = styled.div`
   text-align: center;
   color: white;
   font-weight: 500;
+  ${({ timeOfDay }) =>
+    timeOfDay !== TimeOfDay.Day &&
+    `
   &::before,
   &::after {
     content: '';
@@ -316,5 +382,6 @@ const Sign = styled.div`
       color: inherit;
     }
   }
+`}
 `;
 export default SignBuilding;

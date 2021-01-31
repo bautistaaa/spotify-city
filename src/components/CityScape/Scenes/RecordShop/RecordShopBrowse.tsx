@@ -1,12 +1,15 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import TopTracksWall from './TopTracksWall';
 import RecordBin from './RecordBin';
 import CdCase from '../../CdCase';
 import useKeyPress from '../../../../hooks/useKeyPress';
 import useOnClickOutside from '../../../../hooks/useOnClickOutside';
+import { RecordStoreSceneType } from '.';
 
-const RecordShopBrowse = () => {
+const RecordShopBrowse: FC<{
+  setScene: React.Dispatch<React.SetStateAction<RecordStoreSceneType>>;
+}> = ({ setScene }) => {
   const ref = useRef<MutableRefObject<HTMLDivElement>>(null);
   const escapeKeyPress = useKeyPress('Escape');
   const [currentSelectedTrack, setCurrentSelectedTrack] = useState<
@@ -20,7 +23,10 @@ const RecordShopBrowse = () => {
 
   return (
     <Wrapper>
-      <TopTracksWall setCurrentSelectedTrack={setCurrentSelectedTrack} />
+      <TopTracksWall
+        setCurrentSelectedTrack={setCurrentSelectedTrack}
+        setScene={setScene}
+      />
       {currentSelectedTrack && (
         <>
           <CdCase ref={ref} track={currentSelectedTrack} />

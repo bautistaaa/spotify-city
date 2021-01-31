@@ -1,10 +1,47 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const MusicHall: FC<{ onClick: () => void }> = ({ onClick }) => {
+interface ColorPalette {
+  building: string;
+  door: string;
+  doorBorder: string;
+  roof: string;
+}
+const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
+  [TimeOfDay.Day]: {
+    building: '#828181',
+    door: '#6e4343',
+    doorBorder: '#aeacac',
+    roof: '#828181',
+  },
+  [TimeOfDay.Twilight]: {
+    building: '#3e3e3e',
+    door: '#252525',
+    doorBorder: 'gray',
+    roof: '#5d3d47',
+  },
+  [TimeOfDay.Night]: {
+    building: '#1a1717',
+    door: '#252525',
+    doorBorder: 'gray',
+    roof: '#331721',
+  },
+};
+
+const MusicHall: FC<{ timeOfDay: TimeOfDay; onClick: () => void }> = ({
+  timeOfDay,
+  onClick,
+}) => {
+  const colorPalette = COLOR_PALETTE[timeOfDay];
+
   return (
-    <Wrapper onClick={() => onClick()}>
-      <Marquee>
+    <Wrapper
+      background={colorPalette.building}
+      roof={colorPalette.roof}
+      onClick={() => onClick()}
+    >
+      <Marquee timeOfDay={timeOfDay}>
         <div>NORVA</div>
       </Marquee>
       <BottomRow>
@@ -17,7 +54,10 @@ const MusicHall: FC<{ onClick: () => void }> = ({ onClick }) => {
           <Spine />
           <Spine />
         </Barrier>
-        <Entrance />
+        <Entrance
+          door={colorPalette.door}
+          doorBorder={colorPalette.doorBorder}
+        />
         <Barrier>
           <Spine />
           <Spine />
@@ -31,7 +71,7 @@ const MusicHall: FC<{ onClick: () => void }> = ({ onClick }) => {
     </Wrapper>
   );
 };
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ background: string; roof: string }>`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -39,14 +79,14 @@ const Wrapper = styled.div`
   position: relative;
   height: 200px;
   width: 300px;
-  background: #3e3e3e;
+  background: ${({ background }) => background};
   margin-left: 10px;
   flex-shrink: 0;
   &::before,
   &::after {
     content: '';
     position: absolute;
-    background: #5d3d47;
+    background: ${({ roof }) => roof};
   }
 
   &::before {
@@ -62,11 +102,11 @@ const Wrapper = styled.div`
     left: 50px;
   }
 `;
-const Entrance = styled.div`
+const Entrance = styled.div<{ door: string; doorBorder: string }>`
   height: 70px;
   width: 85px;
-  background: #252525;
-  border: 10px solid gray;
+  background: ${({ door }) => door};
+  border: ${({ doorBorder }) => `10px solid ${doorBorder}`};
   border-bottom: none;
 `;
 const BottomRow = styled.div`
@@ -89,7 +129,7 @@ const Spine = styled.div`
   width: 2px;
   background: #b9b9b9;
 `;
-const Marquee = styled.div`
+const Marquee = styled.div<{ timeOfDay: TimeOfDay }>`
   margin-top: 50px;
   font-size: 50px;
   font-weight: 600;
@@ -101,7 +141,11 @@ const Marquee = styled.div`
   width: 220px;
   height: 40px;
   color: #fff;
+  ${({ timeOfDay }) =>
+    timeOfDay !== TimeOfDay.Day &&
+    `
   animation: neon 1.5s ease-in-out infinite alternate;
+`}
   @keyframes neon {
     from {
       text-shadow: 0 0 10px #ddd, 0 0 20px #ddd, 0 0 30px #fff, 0 0 40px #ff1177,

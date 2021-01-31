@@ -1,40 +1,51 @@
-import styled from "styled-components";
+import { FC } from 'react';
+import styled from 'styled-components';
+import { TimeOfDay } from '../../../enums';
 
-const BuildingOne = () => {
+const BuildingOne: FC<{ background: string; timeOfDay: TimeOfDay }> = ({
+  background,
+  timeOfDay,
+}) => {
   return (
-    <Building>
-      <Antennae />
+    <Building background={background}>
+      <Antennae background={background} timeOfDay={timeOfDay} />
     </Building>
   );
 };
 
-export const Building = styled.div`
+export const Building = styled.div<{ background: string }>`
   position: absolute;
   left: 10px;
   bottom: 0;
   height: 270px;
   width: 180px;
-  background: #ad3c50;
+  background: ${({ background }) => background};
   &::before {
     content: '';
     position: absolute;
-    background: #ad3c50;
+    background: ${({ background }) => background};
   }
 
   &::before {
-    top: -20px;
+    top: -19px;
     height: 20px;
     width: 100%;
     clip-path: polygon(100% 0, 0% 100%, 100% 100%);
   }
 `;
-export const Antennae = styled.div`
+export const Antennae = styled.div<{
+  background: string;
+  timeOfDay: TimeOfDay;
+}>`
   position: absolute;
-  background: #ad3c50;
+  background: ${({ background }) => background};
   width: 3px;
   height: 60px;
   top: -60px;
   left: 30px;
+  ${({ timeOfDay }) =>
+    timeOfDay !== TimeOfDay.Day &&
+    `
   &::before {
     content: '';
     position: absolute;
@@ -65,6 +76,8 @@ export const Antennae = styled.div`
       }
     }
   }
+
+`}
 `;
 
 export default BuildingOne;

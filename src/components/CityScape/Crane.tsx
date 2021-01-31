@@ -1,31 +1,41 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const Crane = () => {
+const COLORS: { [K in TimeOfDay]: [primary: string, secondary: string] } = {
+  [TimeOfDay.Day]: ['#78a7c7', '#476b83'],
+  [TimeOfDay.Twilight]: ['#8b2122', '#ad3c50'],
+  [TimeOfDay.Night]: ['#374971', '#415b8f'],
+};
+
+const Crane: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+  const [baseColor, armColor] = COLORS[timeOfDay];
+
   return (
-    <Wrapper>
-      <Wire />
-      <WireTwo />
-      <WireThree />
-      <Arm />
-      <Base />
+    <Wrapper background={baseColor}>
+      <Wire background={baseColor} />
+      <WireTwo background={baseColor} />
+      <WireThree background={baseColor} />
+      <Arm background={armColor} />
+      <Base background={armColor} />
     </Wrapper>
   );
 };
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ background: string }>`
   position: absolute;
   top: -90px;
   width: 10px;
   height: 80px;
-  background: #ad3c50;
+  background: ${({ background }) => background};
   left: 30px;
 `;
-const Arm = styled.div`
+const Arm = styled.div<{ background: string }>`
   position: absolute;
   top: -20px;
   left: 20px;
   width: 7px;
   height: 85px;
-  background: #ad3c50;
+  background: ${({ background }) => background};
   animation: rotateArm 8s infinite;
 
   @keyframes rotateArm {
@@ -41,7 +51,7 @@ const Arm = styled.div`
   &::before {
     content: '';
     position: absolute;
-    background: #ad3c50;
+    background: ${({ background }) => background};
     height: 8px;
     width: 15px;
     bottom: 5px;
@@ -49,7 +59,7 @@ const Arm = styled.div`
     z-index: -1;
   }
 `;
-const Wire = styled.div`
+const Wire = styled.div<{ background: string }>`
   position: absolute;
   left: 9px;
   top: 10px;
@@ -57,7 +67,7 @@ const Wire = styled.div`
   height: 45px;
   transform-origin: 0 0;
   transform: rotateY(180deg) rotateZ(83deg);
-  background: #8b2122;
+  background: ${({ background }) => background};
   z-index: -1;
   animation: rotateWire 8s infinite;
 
@@ -72,7 +82,7 @@ const Wire = styled.div`
     }
   }
 `;
-const WireTwo = styled.div`
+const WireTwo = styled.div<{ background: string }>`
   position: absolute;
   left: 5px;
   top: 6px;
@@ -80,7 +90,7 @@ const WireTwo = styled.div`
   height: 25px;
   transform-origin: right 0;
   transform: rotateY(0deg) rotateZ(50deg);
-  background: #8b2122;
+  background: ${({ background }) => background};
   z-index: -1;
   animation: rotateWireTwo 8s infinite;
 
@@ -95,14 +105,14 @@ const WireTwo = styled.div`
     }
   }
 `;
-const WireThree = styled.div`
+const WireThree = styled.div<{ background: string }>`
   position: absolute;
   right: -49px;
   top: 19px;
   width: 1px;
   height: 35px;
   transform-origin: 0 0;
-  background: #8b2122;
+  background: ${({ background }) => background};
   z-index: -1;
   animation: rotateWireThree 8s infinite;
   &::after {
@@ -111,7 +121,7 @@ const WireThree = styled.div`
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: #8b2122;
+    background: ${({ background }) => background};
     bottom: 0;
     left: -3px;
   }
@@ -126,8 +136,8 @@ const WireThree = styled.div`
     }
   }
 `;
-const Base = styled.div`
-  background: #8b2122;
+const Base = styled.div<{ background: string }>`
+  background: ${({ background }) => background};
   position: absolute;
   bottom: 0;
   left: -10px;

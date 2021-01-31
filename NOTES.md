@@ -1,3 +1,6 @@
+BACKLOG:
+- change headphones to css
+
 key -> drives sky color
 tempo -> drive # of mountains?
 valence -> time of day -> higher day -> lower -> night -> middle -> twilight
@@ -19,3 +22,10 @@ variations of ground objects
 - mountains
 - buildings
 
+CSS:GO
+______
+prompt is given to user
+"make background black" -- > background: black;
+"make div a circle with height 50px width 50px" border-radius: 50%; height... width..
+
+mutationobserver + getClientRectBounds === originalDomElement

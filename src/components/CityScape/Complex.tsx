@@ -1,31 +1,74 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const Complex = () => {
+interface ColorPalette {
+  concrete: string;
+  building: string;
+  window: string;
+  bush: string;
+  pot: string;
+  doorFrame: string;
+  door: string;
+}
+const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
+  [TimeOfDay.Night]: {
+    concrete: '#928f90',
+    building: 'rgb(176, 170, 131)',
+    window: '#d3dfbf',
+    bush: 'radial-gradient( circle,rgb(49 125 49) 0%,rgb(103 152 103) 66% )',
+    pot: '#777774',
+    doorFrame: '#9c999a',
+    door: '#9e986e',
+  },
+  [TimeOfDay.Twilight]: {
+    concrete: '#928f90',
+    building: 'rgb(212, 203, 148)',
+    window: '#c9c9c9',
+    bush: 'radial-gradient( circle,rgb(49 125 49) 0%,rgb(103 152 103) 66% )',
+    pot: '#777774',
+    doorFrame: '#9c999a',
+    door: '#d4cb94',
+  },
+  [TimeOfDay.Day]: {
+    concrete: '#aea7a9',
+    building: '#e4ddb0',
+    window: '#e6e6e6',
+    bush: 'radial-gradient( circle,rgb(60 158 60) 0%,rgb(123 172 123) 66% )',
+    pot: '#c5c5c5',
+    doorFrame: '#b9b5b7',
+    door: '#d4cb94',
+  },
+};
+
+const Complex: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+  const colors = COLOR_PALETTE[timeOfDay];
+
   return (
     <Wrapper>
-      <Roof />
+      <Roof background={colors.concrete} />
       <RoofShadow />
-      <ThirdFloor>
-        <Window />
-        <Window />
-        <Window />
-        <ThirdFloorRailing />
+      <ThirdFloor background={colors.building}>
+        <Window background={colors.window} />
+        <Window background={colors.window} />
+        <Window background={colors.window} />
+        <ThirdFloorRailing background={colors.concrete} />
         <ThirdFloorRailingShadow />
       </ThirdFloor>
-      <SecondFloor>
-        <Window />
-        <Window />
-        <Window />
-        <SecondFloorRailing />
+      <SecondFloor background={colors.building}>
+        <Window background={colors.window} />
+        <Window background={colors.window} />
+        <Window background={colors.window} />
+        <SecondFloorRailing background={colors.concrete} />
         <SecondFloorRailingShadow />
       </SecondFloor>
-      <FirstFloor>
+      <FirstFloor background={colors.concrete}>
         <Light />
-        <LightBeam />
-        <BigWindow>
-          <Door />
+        <LightBeam timeOfDay={timeOfDay} />
+        <BigWindow background={colors.building}>
+          <Door doorFrame={colors.doorFrame} door={colors.door} />
         </BigWindow>
-        <Plant />
+        <Plant bushColor={colors.bush} potColor={colors.pot} />
       </FirstFloor>
     </Wrapper>
   );
@@ -39,25 +82,25 @@ const Wrapper = styled.div`
   margin-left: 15px;
   flex-shrink: 0;
 `;
-const ThirdFloor = styled.div`
-  background: rgb(212, 203, 148);
+const ThirdFloor = styled.div<{ background: string }>`
+  background: ${({ background }) => background};
   display: flex;
   align-items: center;
   justify-content: space-around;
   position: relative;
   padding: 10px 5px;
 `;
-const SecondFloor = styled.div`
-  background: rgb(212, 203, 148);
+const SecondFloor = styled.div<{ background: string }>`
+  background: ${({ background }) => background};
   display: flex;
   align-items: center;
   justify-content: space-around;
   position: relative;
   padding: 10px 5px;
 `;
-const FirstFloor = styled.div`
+const FirstFloor = styled.div<{ background: string }>`
   height: 70px;
-  background: rgb(156, 151, 153);
+  background: ${({ background }) => background};
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -80,7 +123,7 @@ const Light = styled.div`
     top: 8px;
   }
 `;
-const LightBeam = styled.div`
+const LightBeam = styled.div<{ timeOfDay: TimeOfDay }>`
   z-index: 100;
   position: absolute;
   bottom: 0;
@@ -91,13 +134,17 @@ const LightBeam = styled.div`
     rgb(235 235 235 / 80%) 0%,
     rgb(208 208 205 / 20%) 100%
   );
-  height: 52px;
-  width: 32px;
+  ${({ timeOfDay }) =>
+    timeOfDay !== TimeOfDay.Day &&
+    `
+      height: 52px;
+      width: 32px;
+`}
 `;
-const BaseWindow = styled.div`
+const BaseWindow = styled.div<{ background: string }>`
   width: 25px;
   height: 27px;
-  background: #e6e6e6;
+  background: ${({ background }) => background};
   border: 2px solid #505050;
   z-index: 2;
 `;
@@ -105,13 +152,13 @@ const Window = styled(BaseWindow)`
   bottom: 80px;
   left: 14px;
 `;
-const SecondFloorRailing = styled.div`
+const SecondFloorRailing = styled.div<{ background: string }>`
   width: 135px;
   height: 5px;
   position: absolute;
   left: -5px;
   bottom: 0;
-  background: #898586;
+  background: ${({ background }) => background};
   z-index: 4;
 `;
 const SecondFloorRailingShadow = styled.div`
@@ -123,11 +170,11 @@ const SecondFloorRailingShadow = styled.div`
   bottom: -3px;
   z-index: 3;
 `;
-const ThirdFloorRailing = styled.div`
+const ThirdFloorRailing = styled.div<{ background: string }>`
   width: 135px;
   height: 5px;
   position: absolute;
-  background: #898586;
+  background: ${({ background }) => background};
   left: -5px;
   top: 43px;
   z-index: 4;
@@ -141,11 +188,11 @@ const ThirdFloorRailingShadow = styled.div`
   top: 48px;
   z-index: 3;
 `;
-const Roof = styled.div`
+const Roof = styled.div<{ background: string }>`
   width: 135px;
   height: 12px;
   position: absolute;
-  background: #898586;
+  background: ${({ background }) => background};
   left: -5px;
   top: -5px;
   z-index: 5;
@@ -160,22 +207,22 @@ const RoofShadow = styled.div`
   left: 0px;
   z-index: 3;
 `;
-const BigWindow = styled.div`
+const BigWindow = styled.div<{ background: string }>`
   display: flex;
   align-items: flex-end;
   justify-content: center;
   position: relative;
   width: 70px;
   height: 60px;
-  background: #d4cb94;
+  background: ${({ background }) => background};
   border: 2px solid #505050;
   border-bottom: none;
 `;
-const Door = styled.div`
+const Door = styled.div<{ doorFrame: string; door: string }>`
   position: relative;
   height: 45px;
   width: 31px;
-  background: #b9b5b7;
+  background: ${({ doorFrame }) => doorFrame};
   border: 2px solid #505050;
   border-bottom: none;
   &::before {
@@ -185,7 +232,7 @@ const Door = styled.div`
     right: 3px;
     height: 36px;
     width: 17px;
-    background: #d4cb94;
+    background: ${({ door }) => door};
     border: 2px solid #505050;
   }
   &::after {
@@ -199,7 +246,7 @@ const Door = styled.div`
     border: 2px solid #505050;
   }
 `;
-const Plant = styled.div`
+const Plant = styled.div<{ bushColor: string; potColor: string }>`
   position: absolute;
   bottom: 0;
   left: 15px;
@@ -216,12 +263,7 @@ const Plant = styled.div`
     height: 20px;
     width: 20px;
     border-radius: 50%;
-    background: rgb(33, 138, 33);
-    background: radial-gradient(
-      circle,
-      rgb(60 158 60) 0%,
-      rgb(123 172 123) 66%
-    );
+    background: ${({ bushColor }) => bushColor};
   }
   &::after {
     content: '';
@@ -230,7 +272,7 @@ const Plant = styled.div`
     right: -9px;
     width: 20px;
     height: 10px;
-    background: #c5c5c5;
+    background: ${({ potColor }) => potColor};
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
   }

@@ -1,34 +1,77 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const School = () => {
+interface ColorPalette {
+  building: string;
+  window: string;
+  roof: string;
+  door: string;
+  doorFrame: string;
+  doorknob: string;
+}
+const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
+  [TimeOfDay.Night]: {
+    building: '#7191a9',
+    window: '#d0d39b',
+    door: '#895b2e',
+    doorFrame: '#7e4329',
+    doorknob: '#ceb426',
+    roof: '#747071',
+  },
+  [TimeOfDay.Twilight]: {
+    building: '#85a9c4',
+    window: '#cecfd4',
+    door: '#9d6935',
+    doorFrame: '#7e4329',
+    doorknob: '#ceb426',
+    roof: '#747071',
+  },
+  [TimeOfDay.Day]: {
+    building: '#96bedc',
+    window: '#eeeff5',
+    door: 'rgb(174,116,58)',
+    doorFrame: 'rgb(150 76 42 / 72%)',
+    doorknob: 'gold',
+    roof: '#898586',
+  },
+};
+
+const School: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+  const colors = COLOR_PALETTE[timeOfDay];
+
   return (
     <Base>
-      <Roof />
+      <Roof background={colors.roof} />
       <RoofShadow />
-      <ThirdFloor>
-        <TailWindow />
-        <TailWindow />
-        <TailWindow />
-        <ThirdFloorRailing />
+      <ThirdFloor background={colors.building}>
+        <TallWindow background={colors.window} />
+        <TallWindow background={colors.window} />
+        <TallWindow background={colors.window} />
+        <ThirdFloorRailing background={colors.roof} />
         <ThirdFloorRailingShadow />
       </ThirdFloor>
-      <SecondFloor>
-        <Window />
-        <Window />
-        <Window />
-        <SecondFloorRailing />
+      <SecondFloor background={colors.building}>
+        <Window background={colors.window} />
+        <Window background={colors.window} />
+        <Window background={colors.window} />
+        <SecondFloorRailing background={colors.roof} />
         <SecondFloorRailingShadow />
       </SecondFloor>
-      <FirstFloor>
+      <FirstFloor background={colors.building}>
         <UpperLevel>
-          <Window />
-          <Window />
-          <Window />
+          <Window background={colors.window} />
+          <Window background={colors.window} />
+          <Window background={colors.window} />
         </UpperLevel>
         <LowerLevel>
-          <Window />
-          <Door />
-          <Window />
+          <Window background={colors.window} />
+          <Door
+            background={colors.door}
+            doorFrame={colors.doorFrame}
+            doorknob={colors.doorknob}
+          />
+          <Window background={colors.window} />
         </LowerLevel>
       </FirstFloor>
     </Base>
@@ -43,10 +86,10 @@ const Base = styled.div`
   margin-left: 15px;
   flex-shrink: 0;
 `;
-const Roof = styled.div`
+const Roof = styled.div<{ background: string }>`
   width: 120px;
   height: 5px;
-  background: #898586;
+  background: ${({ background }) => background};
   z-index: 4;
 `;
 const RoofShadow = styled.div`
@@ -57,9 +100,9 @@ const RoofShadow = styled.div`
   background: rgb(107 107 107 / 45%);
   z-index: 3;
 `;
-const ThirdFloor = styled.div`
+const ThirdFloor = styled.div<{ background: string }>`
   position: relative;
-  background: #7da1c5;
+  background: ${({ background }) => background};
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -67,16 +110,16 @@ const ThirdFloor = styled.div`
   height: 55px;
   margin-left: 6px;
 `;
-const SecondFloor = styled.div`
+const SecondFloor = styled.div<{ background: string }>`
   position: relative;
-  background: #7da1c5;
+  background: ${({ background }) => background};
   display: flex;
   justify-content: space-around;
   align-items: center;
   height: 55px;
 `;
-const FirstFloor = styled.div`
-  background: #7da1c5;
+const FirstFloor = styled.div<{ background: string }>`
+  background: ${({ background }) => background};
 `;
 const BaseLevel = styled.div`
   display: flex;
@@ -87,11 +130,11 @@ const UpperLevel = styled(BaseLevel)`
   padding: 10px 0;
 `;
 const LowerLevel = styled(BaseLevel)``;
-const BaseWindow = styled.div`
+const BaseWindow = styled.div<{ background: string }>`
   position: relative;
   width: 22px;
   height: 30px;
-  background: #e6e6e6;
+  background: ${({ background }) => background};
   border: 2px solid #505050;
   &::before {
     content: '';
@@ -103,11 +146,11 @@ const BaseWindow = styled.div`
   }
 `;
 const Window = styled(BaseWindow)``;
-const ThirdFloorRailing = styled.div`
+const ThirdFloorRailing = styled.div<{ background: string }>`
   width: 135px;
   height: 5px;
   position: absolute;
-  background: #898586;
+  background: ${({ background }) => background};
   bottom: 0;
   z-index: 4;
 `;
@@ -119,11 +162,12 @@ const ThirdFloorRailingShadow = styled.div`
   bottom: -5px;
   z-index: 3;
 `;
-const SecondFloorRailing = styled.div`
+const SecondFloorRailing = styled.div<{ background: string }>`
+  width: 135px;
   width: 135px;
   height: 5px;
   position: absolute;
-  background: #898586;
+  background: ${({ background }) => background};
   left: -5px;
   bottom: 0;
   z-index: 4;
@@ -137,7 +181,7 @@ const SecondFloorRailingShadow = styled.div`
   bottom: -5px;
   z-index: 3;
 `;
-const TailWindow = styled(BaseWindow)`
+const TallWindow = styled(BaseWindow)`
   position: relative;
   height: 37px;
   &::before {
@@ -149,11 +193,15 @@ const TailWindow = styled(BaseWindow)`
     height: 2px;
   }
 `;
-const Door = styled.div`
+const Door = styled.div<{
+  background: string;
+  doorFrame: string;
+  doorknob: string;
+}>`
   position: relative;
   width: 29px;
   height: 43px;
-  background: rgb(150 76 42 / 72%);
+  background: ${({ doorFrame }) => doorFrame};
   &::before {
     content: '';
     position: absolute;
@@ -161,7 +209,7 @@ const Door = styled.div`
     height: 40px;
     bottom: 0;
     left: 3px;
-    background: rgb(174, 116, 58);
+    background: ${({ background }) => background};
   }
   &::after {
     content: '';
@@ -170,7 +218,8 @@ const Door = styled.div`
     height: 3px;
     bottom: 18px;
     right: 6px;
-    background: gold;
+    background: ${({ doorknob }) => doorknob};
   }
 `;
+
 export default School;

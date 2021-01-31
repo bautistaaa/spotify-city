@@ -1,12 +1,16 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/macro';
 import { useAppContext } from '../../../../AppContext';
 import { MusicHallSceneType, TrackData } from '.';
+import { SceneType } from '../../../../enums';
+import { useCitySettingContext } from '../../../../CitySettingsContext';
+import Arrow from '../../Arrow';
 
 const MusicHallLobby: FC<{
   setScene: React.Dispatch<React.SetStateAction<MusicHallSceneType>>;
   setTrackData: React.Dispatch<React.SetStateAction<TrackData>>;
 }> = ({ setScene, setTrackData }) => {
+  const { setCitySceneType } = useCitySettingContext();
   const { topTracks } = useAppContext();
   return (
     <Wrapper>
@@ -43,6 +47,13 @@ const MusicHallLobby: FC<{
       <Marquee>
         <div>SELECT A SONG TO ENTER</div>
       </Marquee>
+      <ArrowContainer
+        onClick={() => {
+          setCitySceneType(SceneType.city);
+        }}
+      >
+        <Arrow environmentColor="#28242b" />
+      </ArrowContainer>
     </Wrapper>
   );
 };
@@ -117,6 +128,13 @@ const Marquee = styled.div`
         0 0 35px #ff1177, 0 0 40px #ff1177, 0 0 50px #ff1177, 0 0 75px #ff1177;
     }
   }
+`;
+const ArrowContainer = styled.div`
+  cursor: pointer;
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  transform: scale(-0.3);
 `;
 
 export default MusicHallLobby;

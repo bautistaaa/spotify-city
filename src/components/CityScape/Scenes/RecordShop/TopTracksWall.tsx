@@ -1,17 +1,27 @@
 import React, { FC } from 'react';
 import styled from 'styled-components/macro';
+import { RecordStoreSceneType } from '.';
 import { useAppContext } from '../../../../AppContext';
 import getRandomIntFromInterval from '../../../../utils/getRandomIntFromInterval';
+import Arrow from '../../Arrow';
 
 const TopTracksWall: FC<{
+  setScene: React.Dispatch<React.SetStateAction<RecordStoreSceneType>>;
   setCurrentSelectedTrack: React.Dispatch<
     React.SetStateAction<SpotifyApi.TrackObjectFull | undefined>
   >;
-}> = React.memo(({ setCurrentSelectedTrack }) => {
+}> = React.memo(({ setCurrentSelectedTrack, setScene }) => {
   const { topTracks } = useAppContext();
   if (!topTracks) return null;
   return (
     <Wall>
+      <ArrowContainer
+        onClick={() => {
+          setScene(RecordStoreSceneType.store);
+        }}
+      >
+        <Arrow environmentColor="#5d9caa" />
+      </ArrowContainer>
       <TopTracksSign>
         <Tape />
         Top Tracks
@@ -110,6 +120,13 @@ const Tape2 = styled(BaseTape)`
   transform: rotate(-37deg);
   bottom: 0;
   right: -10px;
+`;
+const ArrowContainer = styled.div`
+  cursor: pointer;
+  position: absolute;
+  top: -14px;
+  right: 0;
+  transform: scale(-0.3);
 `;
 
 export default TopTracksWall;

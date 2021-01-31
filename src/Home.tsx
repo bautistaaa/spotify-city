@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Redirect } from 'react-router-dom';
 import qs from 'query-string';
@@ -6,20 +6,21 @@ import config from './config';
 import useLocalStorage from './hooks/useLocalStorage';
 import request from './services/request';
 import Cityscape from './components/CityScape';
-import { RecommendationsFromSeedsResponse, useAppContext } from './AppContext';
+import { AudioFeature, useAppContext } from './AppContext';
+import { CitySettingsProvider } from './CitySettingsContext';
 
-//const exclude = [
-//'acousticness',
-//'analysis_url',
-//'duration_ms',
-//'track_href',
-//'type',
-//'uri',
-//'id',
-//'mode',
-//'speechiness',
-//'time_signature',
-//];
+const exclude = [
+  'acousticness',
+  'analysis_url',
+  'duration_ms',
+  'track_href',
+  'type',
+  'uri',
+  'id',
+  'mode',
+  'speechiness',
+  'time_signature',
+];
 const getArtistSpotifyIds = (
   topArtists: SpotifyApi.ArtistObjectFull[]
 ): string => {
@@ -28,6 +29,10 @@ const getArtistSpotifyIds = (
 };
 const Home = () => {
   const {
+    audioFeatures,
+    setAudioFeatures,
+    setFeaturedPlaylists,
+    setNewReleases,
     setTopArtists,
     setTrackRecommendations,
     setTopTracks,
@@ -43,23 +48,63 @@ const Home = () => {
           limit: 50,
         };
         try {
+          const featuredPlaylistsRequest: Promise<SpotifyApi.ListOfFeaturedPlaylistsResponse> = request(
+            `${config.apiUrl}/browse/featured-playlists`
+          );
+          const newReleasesRequest: Promise<SpotifyApi.ListOfNewReleasesResponse> = request(
+            `${config.apiUrl}/browse/new-releases`
+          );
           const topArtistsRequest: Promise<SpotifyApi.UsersTopArtistsResponse> = request(
             `${config.apiUrl}/me/top/artists?${qs.stringify(query)}`
           );
           const topTracksRequest: Promise<SpotifyApi.UsersTopTracksResponse> = request(
             `${config.apiUrl}/me/top/tracks?${qs.stringify(query)}`
           );
-          const [topArtists, topTracks] = await Promise.all([
+
+          const [
+            featuredPlaylists,
+            newReleases,
+            topArtists,
+            topTracks,
+          ] = await Promise.all([
+            featuredPlaylistsRequest,
+            newReleasesRequest,
             topArtistsRequest,
             topTracksRequest,
           ]);
           const artistIds = getArtistSpotifyIds(topArtists.items);
-          const trackRecommendations: RecommendationsFromSeedsResponse = await request(
+          const trackRecommendations: SpotifyApi.RecommendationsFromSeedsResponse = await request(
             `${config.apiUrl}/recommendations?seed_artists=${encodeURIComponent(
               artistIds
             )}`
           );
 
+          const ids = topTracks.items.map((tt) => tt.id);
+          const trackFeatures: SpotifyApi.MultipleAudioFeaturesResponse = await request(
+            `${config.apiUrl}/audio-features?${qs.stringify(
+              { ids },
+              { arrayFormat: 'comma' }
+            )}`
+          );
+          const averages = trackFeatures.audio_features.reduce<AudioFeature>(
+            (acc, feature, _, { length }) => {
+              const audioFeature = {} as AudioFeature;
+              for (const [key, value] of Object.entries(feature)) {
+                if (!exclude.includes(key)) {
+                  const accValue = acc[key as keyof AudioFeature] ?? 0;
+                  audioFeature[key as keyof AudioFeature] =
+                    accValue + value / length;
+                }
+              }
+
+              return audioFeature;
+            },
+            {} as AudioFeature
+          );
+          console.table(averages);
+          setAudioFeatures(averages);
+          setFeaturedPlaylists(featuredPlaylists);
+          setNewReleases(newReleases);
           setTopTracks(topTracks);
           setTopArtists(topArtists);
           setTrackRecommendations(trackRecommendations);
@@ -77,11 +122,13 @@ const Home = () => {
   }
 
   return (
-    <Wrapper>
-      <Row>
-        <Cityscape />
-      </Row>
-    </Wrapper>
+    <CitySettingsProvider>
+      <Wrapper>
+        <Row>
+          {audioFeatures && <Cityscape audioFeatures={audioFeatures} />}
+        </Row>
+      </Wrapper>
+    </CitySettingsProvider>
   );
 };
 

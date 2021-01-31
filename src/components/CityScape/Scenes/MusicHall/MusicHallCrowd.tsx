@@ -117,7 +117,6 @@ const Wrapper = styled.div`
   position: relative;
   overflow: hidden;
   animation: fade 1.5s;
-  border: 1px solid red;
   @keyframes fade {
     from {
       opacity: 0;

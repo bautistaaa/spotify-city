@@ -1,15 +1,15 @@
 import styled from 'styled-components/macro';
 
-const BuildingSeven = () => {
+const BuildingSeven: FC<{ background: string }> = ({ background }) => {
   return (
     <Wrapper>
       <Row>
-        <LeftEar />
-        <RightEar />
+        <LeftEar background={background} />
+        <RightEar background={background} />
       </Row>
-      <Top />
-      <Arch />
-      <Base />
+      <Top background={background} />
+      <Arch background={background} />
+      <Base background={background} />
     </Wrapper>
   );
 };
@@ -23,26 +23,28 @@ const Wrapper = styled.div`
   left: 1130px;
   bottom: 0;
 `;
-const Base = styled.div`
+const Base = styled.div<{ background: string }>`
   height: 330px;
   width: 150px;
-  background: #ad3c50;
+  background: ${({ background }) => background};
 `;
-const Arch = styled.div`
+const Arch = styled.div<{ background: string }>`
   width: 150px;
   height: 50px;
-  border-top: 30px solid #ad3c50;
-  border-left: 30px solid #ad3c50;
-  border-right: 30px solid #ad3c50;
+  ${({ background }) => `
+    border-top: 30px solid ${background};
+    border-left: 30px solid ${background};
+    border-right: 30px solid ${background};
+`};
   border-top-right-radius: 40px;
   border-top-left-radius: 40px;
 `;
-const Top = styled.div`
+const Top = styled.div<{ background: string }>`
   position: absolute;
   top: 30px;
   height: 30px;
   width: 150px;
-  background: #ad3c50;
+  background: ${({ background }) => background};
 `;
 const Row = styled.div`
   display: flex;
@@ -51,15 +53,15 @@ const Row = styled.div`
   align-items: flex-end;
   justify-content: space-between;
 `;
-const BaseEar = styled.div`
+const BaseEar = styled.div<{ background: string }>`
   position: relative;
   width: 25px;
   height: 20px;
-  background: #ad3c50;
+  background: ${({ background }) => background};
   &::before,
   &::after {
     content: '';
-    background: #ad3c50;
+    background: ${({ background }) => background};
     position: absolute;
   }
   &::before {

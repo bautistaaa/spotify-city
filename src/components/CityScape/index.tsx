@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useReducer, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import Arrow from './Arrow';
 import {
@@ -22,16 +22,42 @@ import MusicHall from './MusicHall';
 import School from './School';
 import SignBuilding from './SignBuilding';
 import DonutShopInterior from './Scenes/DonutShop';
+import Hotel from './Scenes/Hotel';
 import RecordShopInterior from './Scenes/RecordShop/index';
 import MusicHallScene from './Scenes/MusicHall';
-import { SceneType } from '../../enums';
+import { SceneType, TimeOfDay } from '../../enums';
+import { reducer } from '../../reducers';
 import useRect from '../../hooks/useRect2';
+import { AudioFeature } from '../../AppContext';
+import getTimeOfDay from '../../utils/getTimeOfDay';
+import Sliders from '../../Sliders';
+import { useCitySettingContext } from '../../CitySettingsContext';
 
-const Cityscape: FC = () => {
+const BUILDING_COLORS: { [K in TimeOfDay]: string } = {
+  [TimeOfDay.Day]: '#78a7c7',
+  [TimeOfDay.Twilight]: '#ad3c50',
+  [TimeOfDay.Night]: ' #646f9e',
+};
+const SKY_COLORS: { [K in TimeOfDay]: string } = {
+  [TimeOfDay.Day]: 'linear-gradient(180deg, #ade0ff 0%, #e4f4ff 100%)',
+  [TimeOfDay.Twilight]:
+    'linear-gradient(rgb(135, 60, 119) 0%, rgb(236, 163, 139) 100%)',
+  [TimeOfDay.Night]:
+    'linear-gradient(rgb(10, 27, 78) 0%, rgb(26, 98, 161) 100%)',
+};
+const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
+  const { citySceneType, setCitySceneType } = useCitySettingContext();
+  const [state, dispatch] = useReducer(reducer, {
+    audioFeatures,
+  });
+
+  const { valence } = state;
+  const timeOfDay = getTimeOfDay(valence);
+  const skyColor = SKY_COLORS[timeOfDay];
+  const buildingColor = BUILDING_COLORS[timeOfDay];
   const maskRef = useRef(null);
   const scrollableRef = useRef(null);
   const [x, setX] = useState(0);
-  const [scene, setScene] = useState(SceneType.city);
   const maskRect = useRect(maskRef, x);
   const scrollableRect = useRect(scrollableRef, x);
   const maskWidth = maskRect.width;
@@ -52,40 +78,98 @@ const Cityscape: FC = () => {
     setX(move);
   };
 
-  if (scene === SceneType.city) {
+  const renderScene = () => {
+    if (citySceneType === SceneType.musicHall) {
+      return (
+        <>
+          <MusicHallScene />
+        </>
+      );
+    }
+    if (citySceneType === SceneType.donutShop) {
+      return (
+        <>
+          <DonutShopInterior />
+        </>
+      );
+    }
+    if (citySceneType === SceneType.recordShop) {
+      return (
+        <>
+          <RecordShopInterior />
+        </>
+      );
+    }
+    if (citySceneType === SceneType.hotel) {
+      return (
+        <>
+          <Hotel />
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  if (citySceneType === SceneType.city) {
     return (
-      <>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        <Sliders state={state} dispatch={dispatch} />
+        <br />
+        <br />
+        <br />
+        <br />
         <Mask ref={maskRef}>
           {canScrollLeft && (
             <PreviousArrowContainer onClick={handlePreviousArrowClick}>
               <Arrow environmentColor="#575757" />
             </PreviousArrowContainer>
           )}
-          <Wrapper ref={scrollableRef} pixelsToMove={x}>
+          <Wrapper ref={scrollableRef} pixelsToMove={x} background={skyColor}>
             <Moon />
-            <BirdOne />
-            <BirdTwo />
+            <BirdOne background={buildingColor} />
+            <BirdTwo background={buildingColor} />
             <Background>
-              <BuildingOne />
-              <BuildingTwo />
-              <BuildingThree />
-              <BuildingFour />
-              <BuildingFive />
-              <BuildingSix />
-              <BuildingSeven />
-              <BuildingEight />
+              <BuildingOne background={buildingColor} timeOfDay={timeOfDay} />
+              <BuildingTwo background={buildingColor} timeOfDay={timeOfDay} />
+              <BuildingThree background={buildingColor} />
+              <BuildingFour background={buildingColor} />
+              <BuildingFive background={buildingColor} timeOfDay={timeOfDay} />
+              <BuildingSix background={buildingColor} />
+              <BuildingSeven background={buildingColor} />
+              <BuildingEight background={buildingColor} />
             </Background>
             <Foreground>
-              <MusicHall onClick={() => setScene(SceneType.musicHall)} />
+              <MusicHall
+                onClick={() => setCitySceneType(SceneType.musicHall)}
+                timeOfDay={timeOfDay}
+              />
               <BenchOne />
-              <Shop />
-              <Complex />
+              <Shop timeOfDay={timeOfDay} />
+              <Complex timeOfDay={timeOfDay} />
               <BenchTwo />
-              <RecordShop onClick={() => setScene(SceneType.recordShop)} />
-              <SignBuilding />
-              <DonutShop onClick={() => setScene(SceneType.donutShop)} />
-              <School />
-              <Garage />
+              <RecordShop
+                timeOfDay={timeOfDay}
+                onClick={() => setCitySceneType(SceneType.recordShop)}
+              />
+              <SignBuilding
+                timeOfDay={timeOfDay}
+                onClick={() => setCitySceneType(SceneType.hotel)}
+              />
+              <DonutShop
+                timeOfDay={timeOfDay}
+                onClick={() => setCitySceneType(SceneType.donutShop)}
+              />
+              <School timeOfDay={timeOfDay} />
+              <Garage timeOfDay={timeOfDay} />
               <BenchThree />
             </Foreground>
             <Ground />
@@ -96,37 +180,20 @@ const Cityscape: FC = () => {
             </NextArrowContainer>
           )}
         </Mask>
-      </>
+      </div>
     );
   }
 
-  if (scene === SceneType.musicHall) {
-    return (
-      <>
-        <button onClick={() => setScene(SceneType.city)}>Home</button>
-        <MusicHallScene />
-      </>
-    );
-  }
-  if (scene === SceneType.donutShop) {
-    return (
-      <>
-        <button onClick={() => setScene(SceneType.city)}>Home</button>
-        <DonutShopInterior />
-      </>
-    );
-  }
-  if (scene === SceneType.recordShop) {
-    return (
-      <>
-        <button onClick={() => setScene(SceneType.city)}>Home</button>
-        <RecordShopInterior />
-      </>
-    );
-  }
-  return null;
+  return <SceneWrapper>{renderScene()}</SceneWrapper>;
 };
 
+const SceneWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
 const Mask = styled.div`
   position: relative;
   height: 600px;
@@ -143,12 +210,13 @@ const Mask = styled.div`
     }
   }
 `;
-const Wrapper = styled.div<{ pixelsToMove: number }>`
+const Wrapper = styled.div<{ pixelsToMove: number; background: string }>`
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 1500px;
-  background: linear-gradient(rgb(135, 60, 119) 0%, rgb(236, 163, 139) 100%);
+  background: ${({ background }) => background};
+  //background: linear-gradient(rgb(135, 60, 119) 0%, rgb(236, 163, 139) 100%);
   margin: 0 auto;
   position: relative;
   transform: ${({ pixelsToMove }) => `translateX(${pixelsToMove}px);`};
@@ -216,6 +284,7 @@ const BirdTwo = styled(BaseBird)`
     }
     45%,
     100% {
+      opacity: 0;
       transform: translateX(1520px) translateY(-200px);
     }
   }
@@ -234,7 +303,7 @@ const Ground = styled.div`
 `;
 const Moon = styled.div`
   position: absolute;
-  opacity: 0.6;
+  opacity: 0.8;
   top: 100px;
   left: 110px;
   width: 100px;

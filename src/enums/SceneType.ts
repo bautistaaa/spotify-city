@@ -3,6 +3,7 @@ enum SceneType {
   'donutShop',
   'musicHall',
   'recordShop',
+  'hotel',
 }
 
 export default SceneType;

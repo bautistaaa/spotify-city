@@ -121,7 +121,6 @@ const Artist = styled.div`
 `;
 const Title = styled.div`
   font-weight: 300;
-
 `;
 
 export default forwardRef(CdCase);

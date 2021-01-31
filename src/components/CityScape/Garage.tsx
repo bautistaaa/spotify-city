@@ -1,47 +1,93 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
+import { TimeOfDay } from '../../enums';
 
-const Garage = () => {
+interface ColorPalette {
+  building: string;
+  awning: string;
+  awningFront: string;
+  garage: string;
+  window: string;
+  door: string;
+  roof: string;
+}
+const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
+  [TimeOfDay.Night]: {
+    building: '#ab9f71',
+    awning: '#51212a',
+    awningFront: '#863a48',
+    garage: '#807f7f',
+    window: '#d0d39b',
+    door: '#abaec9',
+    roof: '#51212a',
+  },
+  [TimeOfDay.Twilight]: {
+    building: '#ab9f71',
+    awning: '#70303d',
+    awningFront: '#923e4e',
+    garage: '#9d9b9b',
+    window: '#738c9b',
+    door: '#cecece',
+    roof: '#722e3a',
+  },
+  [TimeOfDay.Day]: {
+    building: '#dfcf92',
+    awning: '#863948',
+    awningFront: '#a34658',
+    garage: '#cecece',
+    window: '#7e97a7',
+    door: '#cecece',
+    roof: '#903a49',
+  },
+};
+const Garage: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+  const colors = COLOR_PALETTE[timeOfDay];
+
   return (
-    <Wrapper>
-      <Awning />
-      <AwningShadow />
-      <Door />
-      <Light />
-      <Sign />
-      <GarageDoor>
+    <Wrapper background={colors.building}>
+      <Roof background={colors.roof} timeOfDay={timeOfDay} />
+      <Awning awningFront={colors.awningFront} awning={colors.awning} />
+      <AwningShadow timeOfDay={timeOfDay} />
+      <Door background={colors.door} />
+      <Light timeOfDay={timeOfDay} />
+      <GarageDoor background={colors.garage} window={colors.window}>
         <GarageDoorWindownFrame />
       </GarageDoor>
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ background: string }>`
   width: 175px;
   height: 90px;
   position: relative;
   margin-left: 10px;
-  background: #dfcf92;
+  background: ${({ background }) => background};
   flex-shrink: 0;
 `;
-const Light = styled.div`
+const Light = styled.div<{ timeOfDay: TimeOfDay }>`
   z-index: 100;
   position: absolute;
   bottom: 0;
   left: 7px;
-  clip-path: polygon(34% 0, 71% 0, 98% 100%, 3% 100%);
-  background: linear-gradient(
-    180deg,
-    rgb(235 235 235 / 90%) 0%,
-    rgb(208 208 205 / 20%) 100%
-  );
-  height: 45px;
-  width: 45px;
+  ${({ timeOfDay }) =>
+    timeOfDay !== TimeOfDay.Day &&
+    `
+    clip-path: polygon(34% 0, 71% 0, 98% 100%, 3% 100%);
+    background: linear-gradient(
+      180deg,
+      rgb(235 235 235 / 90%) 0%,
+      rgb(208 208 205 / 20%) 100%
+    );
+    height: 45px;
+    width: 45px;
+`};
 `;
-const Awning = styled.div`
+const Awning = styled.div<{ awningFront: string; awning: string }>`
   position: absolute;
   width: 45px;
   height: 8px;
-  background: #939292;
+  background: ${({ awningFront }) => awningFront};
   bottom: 45px;
   left: 7px;
   z-index: 5;
@@ -50,21 +96,25 @@ const Awning = styled.div`
     position: absolute;
     width: 29px;
     top: -9px;
-    border-bottom: 9px solid #7f7d7d;
+    border-bottom: ${({ awning }) => `9px solid ${awning}`};
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
   }
 `;
-const AwningShadow = styled.div`
+const AwningShadow = styled.div<{ timeOfDay: TimeOfDay }>`
   position: absolute;
-  width: 39px;
+  ${({ timeOfDay }) =>
+    timeOfDay === TimeOfDay.Day &&
+    `
   height: 8px;
+`}
+  width: 39px;
   background: rgb(118 118 118 / 45%);
   bottom: 38px;
   left: 10px;
   z-index: 4;
 `;
-const Door = styled.div`
+const Door = styled.div<{ background: string }>`
   position: absolute;
   width: 29px;
   height: 43px;
@@ -78,7 +128,7 @@ const Door = styled.div`
     height: 40px;
     bottom: 0;
     left: 3px;
-    background: rgb(178, 178, 178);
+    background: ${({ background }) => background};
   }
   &::after {
     content: '';
@@ -91,13 +141,13 @@ const Door = styled.div`
     background: gray;
   }
 `;
-const GarageDoor = styled.div`
+const GarageDoor = styled.div<{ background: string; window: string }>`
   position: absolute;
   width: 100px;
   height: 62px;
   bottom: 0;
   right: 15px;
-  background: rgb(207 207 207);
+  background: ${({ background }) => background};
   border: 2px solid gray;
   border-bottom: none;
   &::after {
@@ -106,7 +156,7 @@ const GarageDoor = styled.div`
     top: 16px;
     width: 100%;
     height: 25px;
-    background: #7e97a7;
+    background: ${({ window }) => window};
     border: 1px solid grey;
     border-left: none;
     border-right: none;
@@ -121,22 +171,28 @@ const GarageDoorWindownFrame = styled.div`
   background: grey;
   z-index: 5;
 `;
-const Sign = styled.div`
+const Roof = styled.div<{ background: string; timeOfDay: TimeOfDay }>`
   position: absolute;
-  top: 7px;
-  width: 83%;
-  height: 15px;
-  background: grey;
-  left: 15px;
-  &::after {
+  background: ${({ background }) => background};
+  border-radius: 1px;
+  width: 185px;
+  height: 12px;
+  top: -2px;
+  left: -5px;
+  z-index: 4;
+  ${({ timeOfDay }) =>
+    timeOfDay === TimeOfDay.Day &&
+    `
+  &::before {
     content: '';
     position: absolute;
-    background: #dddbdb;
-    top: 4px;
+    bottom: -4px;
+    height: 4px;
+    width: 175px;
+    background: rgb(177, 168, 134);
     left: 5px;
-    width: 93%;
-    height: 7px;
   }
+`}
 `;
 
 export default Garage;

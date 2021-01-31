@@ -2,9 +2,13 @@ import { FC, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import request from '../../../../services/request';
 import config from '../../../../config';
+import Arrow from '../../Arrow';
 import truncateStringByLimit from '../../../../utils/truncateStringByLimit';
+import { useCitySettingContext } from '../../../../CitySettingsContext';
+import { SceneType } from '../../../../enums';
 
 const DonutShopInterior: FC = () => {
+  const { setCitySceneType } = useCitySettingContext();
   const [recentlyPlayed, setRecentlyPlayed] = useState<
     SpotifyApi.UsersRecentlyPlayedTracksResponse | undefined
   >();
@@ -18,7 +22,6 @@ const DonutShopInterior: FC = () => {
 
     fetchRecentlyPlayedTracks();
   }, []);
-  console.log(recentlyPlayed);
 
   return (
     <Wrapper>
@@ -189,6 +192,13 @@ const DonutShopInterior: FC = () => {
         </Chair>
       </ChairRow>
       <Floor />
+      <ArrowContainer
+        onClick={() => {
+          setCitySceneType(SceneType.city);
+        }}
+      >
+        <Arrow environmentColor="#67462d" />
+      </ArrowContainer>
     </Wrapper>
   );
 };
@@ -661,4 +671,12 @@ const Artist = styled.div`
 const Title = styled.div`
   font-size: 12px;
 `;
+const ArrowContainer = styled.div`
+  cursor: pointer;
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  transform: scale(-0.3);
+`;
+
 export default DonutShopInterior;

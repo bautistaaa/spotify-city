@@ -1,11 +1,15 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components/macro';
 import { RecordStoreSceneType } from './';
 import { useAppContext } from '../../../../AppContext';
+import { useCitySettingContext } from '../../../../CitySettingsContext';
+import { SceneType } from '../../../../enums';
+import Arrow from '../../Arrow';
 
 const RecordShopInterior: FC<{
   setScene: React.Dispatch<React.SetStateAction<RecordStoreSceneType>>;
 }> = ({ setScene }) => {
+  const { setCitySceneType } = useCitySettingContext();
   const { topTracks } = useAppContext();
   return (
     <>
@@ -130,7 +134,14 @@ const RecordShopInterior: FC<{
             </Counter>
           </CounterWrapper>
         </Row>
-        <Floor></Floor>
+        <Floor />
+        <ArrowContainer
+          onClick={() => {
+            setCitySceneType(SceneType.city);
+          }}
+        >
+          <Arrow environmentColor="#1a0303" />
+        </ArrowContainer>
       </Wrapper>
     </>
   );
@@ -600,6 +611,13 @@ const ChairBack = styled.div`
   &::after {
     right: 8px;
   }
+`;
+const ArrowContainer = styled.div`
+  cursor: pointer;
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  transform: scale(-0.3);
 `;
 
 export default RecordShopInterior;

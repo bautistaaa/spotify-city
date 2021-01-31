@@ -1,15 +1,20 @@
+import { FC } from 'react';
 import styled from 'styled-components/macro';
-import BuildingFour from './BuildingFour';
 
-const BuildingEight = () => {
-  return <Wrapper />;
+const BuildingEight: FC<{ background: string }> = ({ background }) => {
+  return <Wrapper background={background} />;
 };
 
-const Wrapper = styled(BuildingFour)`
+const Wrapper = styled.div<{ background: string }>`
+  position: absolute;
+  bottom: 0;
+  height: 420px;
+  width: 120px;
+  background: ${({ background }) => background};
   left: 1320px;
   &::after,
   &::before {
-    background: #ad3c50;
+    background: ${({ background }) => background};
     content: '';
     position: absolute;
     top: -15px;

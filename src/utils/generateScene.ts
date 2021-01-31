@@ -34,6 +34,8 @@ const generateScene = (
     type = ObjectType.mountains;
   }
 
+console.log(timeOfDay)
+console.log(type)
   const result = GRADIENTS[timeOfDay][type];
   const degrees = result.degrees;
   const fromR = getRandomWithin(result.from.red);

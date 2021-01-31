@@ -19,7 +19,6 @@ const RecordBin: FC<{
   >;
 }> = React.memo(({ setCurrentSelectedTrack }) => {
   const { trackRecommendations } = useAppContext();
-  console.log(trackRecommendations);
   const [rgbs, setRgbs] = useState<Rgbs[]>([]);
 
   useEffect(() => {
