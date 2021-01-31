@@ -115,6 +115,7 @@ const Home = () => {
 
       fetch();
     }
+    // eslint-disable-next-line
   }, [token]);
 
   if (!token) {

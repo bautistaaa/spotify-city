@@ -30,7 +30,6 @@ import { reducer } from '../../reducers';
 import useRect from '../../hooks/useRect2';
 import { AudioFeature } from '../../AppContext';
 import getTimeOfDay from '../../utils/getTimeOfDay';
-import Sliders from '../../Sliders';
 import { useCitySettingContext } from '../../CitySettingsContext';
 
 const BUILDING_COLORS: { [K in TimeOfDay]: string } = {
@@ -47,7 +46,7 @@ const SKY_COLORS: { [K in TimeOfDay]: string } = {
 };
 const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   const { citySceneType, setCitySceneType } = useCitySettingContext();
-  const [state, dispatch] = useReducer(reducer, {
+  const [state] = useReducer(reducer, {
     audioFeatures,
   });
 
@@ -122,11 +121,6 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
           width: '100%',
         }}
       >
-        <Sliders state={state} dispatch={dispatch} />
-        <br />
-        <br />
-        <br />
-        <br />
         <Mask ref={maskRef}>
           {canScrollLeft && (
             <PreviousArrowContainer onClick={handlePreviousArrowClick}>

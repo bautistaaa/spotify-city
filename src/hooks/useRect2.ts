@@ -15,7 +15,10 @@ function getRect<T extends HTMLElement>(element?: T): RectResult {
   return rect;
 }
 
-const useRect = <T extends HTMLElement>(ref: RefObject<T>, position: number): RectResult => {
+const useRect = <T extends HTMLElement>(
+  ref: RefObject<T>,
+  position: number
+): RectResult => {
   const [rect, setRect] = useState<RectResult>(
     ref && ref.current ? getRect(ref.current) : getRect()
   );
@@ -45,6 +48,7 @@ const useRect = <T extends HTMLElement>(ref: RefObject<T>, position: number): Re
       window.addEventListener('resize', handleResize); // Browser support, remove freely
       return () => window.removeEventListener('resize', handleResize);
     }
+    // eslint-disable-next-line
   }, [position]);
 
   return rect;
