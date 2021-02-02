@@ -29,6 +29,27 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+    <iframe
+      alt="Audio Playback Container"
+      tabindex="-1"
+      allow="encrypted-media; autoplay"
+      style="
+        position: absolute !important;
+        left: -1px !important;
+        width: 0px !important;
+        height: 0px !important;
+        border: none !important;
+        outline: none !important;
+      "
+    ></iframe>
+    <!--<iframe-->
+    <!--src="https://open.spotify.com/embed/track/5oEQssF3WsqNHjq6pSoAut"-->
+    <!--width="300"-->
+    <!--height="380"-->
+    <!--frameborder="0"-->
+    <!--allowtransparency="true"-->
+    <!--allow="encrypted-media; autoplay"-->
+    <!--></iframe>-->
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -44,7 +65,7 @@
   <script>
     window.onSpotifyWebPlaybackSDKReady = () => {
       const token = window.localStorage.getItem('token');
-       window.player = new Spotify.Player({
+      window.player = new Spotify.Player({
         name: 'Web Playback SDK Quick Start Player',
         getOAuthToken: (cb) => {
           cb(token);

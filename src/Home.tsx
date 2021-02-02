@@ -76,7 +76,7 @@ const Home = () => {
           const trackRecommendations: SpotifyApi.RecommendationsFromSeedsResponse = await request(
             `${config.apiUrl}/recommendations?seed_artists=${encodeURIComponent(
               artistIds
-            )}`
+            )}&min_popularity=50`
           );
 
           const ids = topTracks.items.map((tt) => tt.id);
@@ -101,7 +101,7 @@ const Home = () => {
             },
             {} as AudioFeature
           );
-          console.table(averages);
+
           setAudioFeatures(averages);
           setFeaturedPlaylists(featuredPlaylists);
           setNewReleases(newReleases);

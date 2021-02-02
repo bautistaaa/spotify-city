@@ -6,12 +6,85 @@ import Arrow from '../../Arrow';
 import truncateStringByLimit from '../../../../utils/truncateStringByLimit';
 import { useCitySettingContext } from '../../../../CitySettingsContext';
 import { SceneType } from '../../../../enums';
+import useIframe from '../../../../hooks/useIframe';
 
+const RecentlyPlayedTrack: FC<{
+  imageSrc: string;
+  name: string;
+  previewUrl: string | null;
+  currentPreviewUrl: string | null;
+  setCurrentPreviewUrl: React.Dispatch<React.SetStateAction<string | null>>;
+  title: string;
+  uri: string;
+}> = ({
+  imageSrc,
+  name,
+  previewUrl: trackPreviewUrl,
+  currentPreviewUrl,
+  setCurrentPreviewUrl,
+  title,
+  uri,
+}) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useIframe(previewUrl);
+  useEffect(() => {
+    setCurrentPreviewUrl(previewUrl);
+  }, [previewUrl, setCurrentPreviewUrl]);
+
+  const handleButtonClick = () => {
+    setPreviewUrl((previewUrl) => {
+      if (previewUrl) {
+        return null;
+      }
+
+      return trackPreviewUrl;
+    });
+  };
+
+  return (
+    <Track>
+      <img width="32" height="32" src={imageSrc} alt="" />
+      <TrackInfo>
+        <Artist>{name}</Artist>
+        <Title>{title}</Title>
+      </TrackInfo>
+      <SlidingShelf>
+        <ButtonsContainer>
+          {(!currentPreviewUrl || previewUrl !== currentPreviewUrl) && (
+            <PreviewButton
+              onClick={handleButtonClick}
+              disabled={!trackPreviewUrl}
+              title={
+                !trackPreviewUrl
+                  ? 'No Preview Available'
+                  : 'Click to Preview Song'
+              }
+            >
+              <img height="25" src="preview.svg" alt="Open In Spotify" />
+            </PreviewButton>
+          )}
+          {currentPreviewUrl && previewUrl === currentPreviewUrl && (
+            <PreviewButton onClick={handleButtonClick}>
+              <img height="25" src="pause.svg" alt="Pause Preview" />
+            </PreviewButton>
+          )}
+          <SpotifyButton href={uri} title="Open In Spotify">
+            <img height="25" src="spotify.svg" alt="Open In Spotify" />
+          </SpotifyButton>
+        </ButtonsContainer>
+      </SlidingShelf>
+    </Track>
+  );
+};
 const DonutShopInterior: FC = () => {
   const { setCitySceneType } = useCitySettingContext();
   const [recentlyPlayed, setRecentlyPlayed] = useState<
     SpotifyApi.UsersRecentlyPlayedTracksResponse | undefined
   >();
+  const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(
+    null
+  );
   useEffect(() => {
     const fetchRecentlyPlayedTracks = async () => {
       const recentlyPlayedResponse: SpotifyApi.UsersRecentlyPlayedTracksResponse = await request(
@@ -26,6 +99,7 @@ const DonutShopInterior: FC = () => {
   return (
     <Wrapper>
       <Wall>
+        <div>{currentPreviewUrl}</div>
         <Sign>DONUT SHOP</Sign>
         <TopTracks>
           <TopTracksTitle>Recently Played</TopTracksTitle>
@@ -35,17 +109,21 @@ const DonutShopInterior: FC = () => {
                 name,
                 album: { images },
                 artists,
+                preview_url,
                 uri,
               },
             } = rp;
             return (
-              <Track key={i} href={uri}>
-                <img width="32" height="32" src={images?.[2]?.url} alt="" />
-                <TrackInfo>
-                  <Artist>{artists?.[0]?.name}</Artist>
-                  <Title>{truncateStringByLimit(name, 15)}</Title>
-                </TrackInfo>
-              </Track>
+              <RecentlyPlayedTrack
+                key={i}
+                name={artists?.[0]?.name}
+                title={truncateStringByLimit(name, 15)}
+                imageSrc={images?.[2]?.url}
+                previewUrl={preview_url}
+                uri={uri}
+                currentPreviewUrl={currentPreviewUrl}
+                setCurrentPreviewUrl={setCurrentPreviewUrl}
+              />
             );
           })}
         </TopTracks>
@@ -651,7 +729,20 @@ const Floor = styled.div`
   width: 100%;
   height: 140px;
 `;
-const Track = styled.a`
+const SlidingShelf = styled.div`
+  background: #ffffff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 5px;
+  transform: translateX(65px);
+  transition: transform 0.6s;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+`;
+const Track = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -659,6 +750,12 @@ const Track = styled.a`
   text-decoration: none;
   color: #ccccce;
   margin-bottom: 5px;
+  overflow: hidden;
+  &:hover {
+    ${SlidingShelf} {
+      transform: translateX(0px);
+    }
+  }
 `;
 const TrackInfo = styled.div`
   margin-left: 20px;
@@ -677,6 +774,27 @@ const ArrowContainer = styled.div`
   bottom: -14px;
   left: 0;
   transform: scale(-0.3);
+`;
+const ButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+`;
+const PreviewButton = styled.button`
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  height: 25px;
+  width: 25px;
+`;
+const SpotifyButton = styled.a`
+  margin-left: 5px;
+  height: 25px;
+  width: 25px;
 `;
 
 export default DonutShopInterior;

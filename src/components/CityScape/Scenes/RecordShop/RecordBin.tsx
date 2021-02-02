@@ -11,7 +11,6 @@ interface Rgbs {
 const createRgbString = (rgb: number[]) => {
   return `rgb(${rgb.join(',')})`;
 };
-// eslint-disable-next-line react-hooks/rules-of-hooks
 
 const RecordBin: FC<{
   setCurrentSelectedTrack: React.Dispatch<
@@ -200,4 +199,5 @@ const Tape2 = styled(BaseTape)`
   top: 0;
   right: -20px;
 `;
+
 export default RecordBin;

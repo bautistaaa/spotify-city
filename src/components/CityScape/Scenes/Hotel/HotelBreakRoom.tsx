@@ -15,6 +15,7 @@ const HotelBreakRoom: FC<{
   ] = useState<SpotifyApi.AlbumObjectSimplified | null>(null);
   const collection =
     sceneType === HotelSceneType.newReleases ? newReleases : featuredPlaylists;
+  console.log(collection);
 
   /**
    * This is ugly and idgaf

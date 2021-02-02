@@ -1,14 +1,35 @@
-import { ForwardRefRenderFunction, MutableRefObject, forwardRef } from 'react';
+import {
+  ForwardRefRenderFunction,
+  MutableRefObject,
+  forwardRef,
+  useState,
+} from 'react';
 import styled from 'styled-components/macro';
+import useIframe from '../../hooks/useIframe';
 
 const CdCase: ForwardRefRenderFunction<
   MutableRefObject<HTMLDivElement>,
   { track: SpotifyApi.TrackObjectFull }
 > = ({ track }, ref) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const imageSrc = track.album.images?.[0]?.url;
+  const trackPreviewUrl = track.preview_url;
+
+  useIframe(previewUrl);
+
+  const handleButtonClick = () => {
+    setPreviewUrl((previewUrl) => {
+      if (previewUrl) {
+        return null;
+      }
+
+      return trackPreviewUrl;
+    });
+  };
+
   return (
     <Container ref={ref}>
-      <Wrapper href={track.uri}>
+      <Wrapper>
         <Cover>
           <AlbumImage src={imageSrc} />
           <TopHolder />
@@ -18,6 +39,29 @@ const CdCase: ForwardRefRenderFunction<
       <Metadata>
         <Artist>{track.artists?.[0]?.name}</Artist>
         <Title>{track.name}</Title>
+        <ButtonsContainer>
+          {!previewUrl && (
+            <PreviewButton
+              onClick={handleButtonClick}
+              disabled={!trackPreviewUrl}
+              title={
+                !trackPreviewUrl
+                  ? 'No Preview Available'
+                  : 'Click to Preview Song'
+              }
+            >
+              <img height="25" src="preview.svg" alt="Open In Spotify" />
+            </PreviewButton>
+          )}
+          {previewUrl && (
+            <PreviewButton onClick={handleButtonClick}>
+              <img height="25" src="pause.svg" alt="Pause Preview" />
+            </PreviewButton>
+          )}
+          <SpotifyButton href={track.uri} title="Open In Spotify">
+            <img height="25" src="spotify.svg" alt="Open In Spotify" />
+          </SpotifyButton>
+        </ButtonsContainer>
       </Metadata>
     </Container>
   );
@@ -31,7 +75,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
 `;
-const Wrapper = styled.a`
+const Wrapper = styled.div`
   position: relative;
   display: block;
   width: 400px;
@@ -107,7 +151,7 @@ const AlbumImage = styled.img`
   object-fit: cover;
 `;
 const Metadata = styled.div`
-  background: #ffffffcf;
+  background: #ffffff;
   width: 100%;
   margin-top: 10px;
   padding: 20px;
@@ -121,6 +165,23 @@ const Artist = styled.div`
 `;
 const Title = styled.div`
   font-weight: 300;
+  margin-bottom: 5px;
+`;
+const ButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+`;
+const PreviewButton = styled.button`
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+`;
+const SpotifyButton = styled.a`
+  margin-left: 5px;
 `;
 
 export default forwardRef(CdCase);
