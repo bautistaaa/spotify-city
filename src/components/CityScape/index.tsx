@@ -122,11 +122,6 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
           width: '100%',
         }}
       >
-        <Sliders state={state} dispatch={dispatch} />
-        <br />
-        <br />
-        <br />
-        <br />
         <Mask ref={maskRef}>
           {canScrollLeft && (
             <PreviousArrowContainer onClick={handlePreviousArrowClick}>
