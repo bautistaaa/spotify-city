@@ -7,6 +7,7 @@ import makeItHeady from '../../../../utils/makeItHeady';
 import SpotifyPlayer from '../../SpotifyPlayer';
 import styled from 'styled-components/macro';
 import { ColorInfo, KEY_HUES } from '../../../../constants/colors';
+import Arrow from '../../Arrow';
 
 const renderClosestPhones = (colorInfo: ColorInfo, duration: number) => {
   return makeItPhony(7, PhoneDistance.Closest, colorInfo, duration);
@@ -28,9 +29,6 @@ const MusicHallCrowd: FC<{
 
     return (
       <>
-        <button onClick={() => setScene(MusicHallSceneType.lobby)}>
-          Lobby
-        </button>
         <Wrapper>
           <StageWrapper>
             <Row>
@@ -83,6 +81,14 @@ const MusicHallCrowd: FC<{
             </PhoneWrapper>
             {renderClosestHeads(colorInfo)}
           </AudienceWrapper>
+          <ArrowContainer
+            onClick={() => {
+              console.log('wtf');
+              setScene(MusicHallSceneType.lobby);
+            }}
+          >
+            <Arrow environmentColor="#28242b" />
+          </ArrowContainer>
         </Wrapper>
         <SpotifyPlayer track={trackData.uri} />
       </>
@@ -401,5 +407,12 @@ const LightBeamThree = styled.div<{ animationDuration: number }>`
       transform: rotateZ(10deg);
     }
   }
+`;
+const ArrowContainer = styled.div`
+  cursor: pointer;
+  position: absolute;
+  bottom: -14px;
+  left: 0;
+  transform: scale(-0.3);
 `;
 export default MusicHallCrowd;

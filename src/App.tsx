@@ -1,6 +1,5 @@
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import Callback from './Callback';
-import Original from './Original';
 import Home from './Home';
 import Login from './Login';
 import { AppProvider } from './AppContext';
@@ -13,7 +12,6 @@ function App() {
           <Route exact path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/callback" component={Callback} />
-          <Route path="/og" component={Original} />
         </Switch>
       </Router>
     </AppProvider>

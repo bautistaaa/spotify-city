@@ -1,9 +1,15 @@
-import { Distance, TimeOfDay } from '../enums';
 import OVERRIDES from '../constants/mountains/overrides';
+import { BorderType, Distance, TimeOfDay } from '../enums';
 import getByWeight from '../utils/getByWeight';
 import getObjectCount from '../utils/getObjectCount';
 import getRandomIntFromInterval from './getRandomIntFromInterval';
-import { MountainOverrides } from '../Mountain';
+
+export type MountainOverrides = {
+  [K in BorderType]?: {
+    color: string;
+    shade: string;
+  };
+} & { zIndex: number };
 
 const TEMPO_UPPER_BOUND = 250;
 const SCREEN_WIDTH = 800;

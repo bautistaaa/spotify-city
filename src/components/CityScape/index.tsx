@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useRef, useState } from 'react';
+import React, { FC, FormEvent, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import Arrow from './Arrow';
 import {
@@ -11,6 +11,7 @@ import {
   BuildingSeven,
   BuildingEight,
 } from './Background';
+import WelcomeModal from '../WelcomeModal';
 import BaseBird from './Bird';
 import BaseBench from './Bench';
 import Shop from './Shop';
@@ -26,11 +27,12 @@ import Hotel from './Scenes/Hotel';
 import RecordShopInterior from './Scenes/RecordShop/index';
 import MusicHallScene from './Scenes/MusicHall';
 import { SceneType, TimeOfDay } from '../../enums';
-import { reducer } from '../../reducers';
 import useRect from '../../hooks/useRect2';
 import { AudioFeature } from '../../AppContext';
 import getTimeOfDay from '../../utils/getTimeOfDay';
 import { useCitySettingContext } from '../../CitySettingsContext';
+import NavigationButton from '../NavigationButton';
+import RadioButton from '../RadioButton';
 
 const BUILDING_COLORS: { [K in TimeOfDay]: string } = {
   [TimeOfDay.Day]: '#78a7c7',
@@ -46,11 +48,10 @@ const SKY_COLORS: { [K in TimeOfDay]: string } = {
 };
 const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   const { citySceneType, setCitySceneType } = useCitySettingContext();
-  const [state] = useReducer(reducer, {
-    audioFeatures,
-  });
+  const [valence, setValence] = useState(audioFeatures.valence);
 
-  const { valence } = state;
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
+  const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const timeOfDay = getTimeOfDay(valence);
   const skyColor = SKY_COLORS[timeOfDay];
   const buildingColor = BUILDING_COLORS[timeOfDay];
@@ -107,78 +108,140 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
       );
     }
 
+    if (citySceneType === SceneType.city) {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          <Mask ref={maskRef}>
+            {canScrollLeft && (
+              <PreviousArrowContainer onClick={handlePreviousArrowClick}>
+                <Arrow environmentColor="#575757" />
+              </PreviousArrowContainer>
+            )}
+            <Wrapper ref={scrollableRef} pixelsToMove={x} background={skyColor}>
+              <Moon />
+              <BirdOne background={buildingColor} />
+              <BirdTwo background={buildingColor} />
+              <Background>
+                <BuildingOne background={buildingColor} timeOfDay={timeOfDay} />
+                <BuildingTwo background={buildingColor} timeOfDay={timeOfDay} />
+                <BuildingThree background={buildingColor} />
+                <BuildingFour background={buildingColor} />
+                <BuildingFive
+                  background={buildingColor}
+                  timeOfDay={timeOfDay}
+                />
+                <BuildingSix background={buildingColor} />
+                <BuildingSeven background={buildingColor} />
+                <BuildingEight background={buildingColor} />
+              </Background>
+              <Foreground>
+                <MusicHall
+                  onClick={() => setCitySceneType(SceneType.musicHall)}
+                  timeOfDay={timeOfDay}
+                />
+                <BenchOne />
+                <Shop timeOfDay={timeOfDay} />
+                <Complex timeOfDay={timeOfDay} />
+                <BenchTwo />
+                <RecordShop
+                  timeOfDay={timeOfDay}
+                  onClick={() => setCitySceneType(SceneType.recordShop)}
+                />
+                <SignBuilding
+                  timeOfDay={timeOfDay}
+                  onClick={() => setCitySceneType(SceneType.hotel)}
+                />
+                <DonutShop
+                  timeOfDay={timeOfDay}
+                  onClick={() => setCitySceneType(SceneType.donutShop)}
+                />
+                <School timeOfDay={timeOfDay} />
+                <Garage timeOfDay={timeOfDay} />
+                <BenchThree />
+              </Foreground>
+              <Ground />
+            </Wrapper>
+            {canScrollRight && (
+              <NextArrowContainer onClick={handleNextArrowClick}>
+                <Arrow environmentColor="#575757" />
+              </NextArrowContainer>
+            )}
+          </Mask>
+        </div>
+      );
+    }
     return null;
   };
 
-  if (citySceneType === SceneType.city) {
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-       <Mask ref={maskRef}>
-          {canScrollLeft && (
-            <PreviousArrowContainer onClick={handlePreviousArrowClick}>
-              <Arrow environmentColor="#575757" />
-            </PreviousArrowContainer>
-          )}
-          <Wrapper ref={scrollableRef} pixelsToMove={x} background={skyColor}>
-            <Moon />
-            <BirdOne background={buildingColor} />
-            <BirdTwo background={buildingColor} />
-            <Background>
-              <BuildingOne background={buildingColor} timeOfDay={timeOfDay} />
-              <BuildingTwo background={buildingColor} timeOfDay={timeOfDay} />
-              <BuildingThree background={buildingColor} />
-              <BuildingFour background={buildingColor} />
-              <BuildingFive background={buildingColor} timeOfDay={timeOfDay} />
-              <BuildingSix background={buildingColor} />
-              <BuildingSeven background={buildingColor} />
-              <BuildingEight background={buildingColor} />
-            </Background>
-            <Foreground>
-              <MusicHall
-                onClick={() => setCitySceneType(SceneType.musicHall)}
-                timeOfDay={timeOfDay}
-              />
-              <BenchOne />
-              <Shop timeOfDay={timeOfDay} />
-              <Complex timeOfDay={timeOfDay} />
-              <BenchTwo />
-              <RecordShop
-                timeOfDay={timeOfDay}
-                onClick={() => setCitySceneType(SceneType.recordShop)}
-              />
-              <SignBuilding
-                timeOfDay={timeOfDay}
-                onClick={() => setCitySceneType(SceneType.hotel)}
-              />
-              <DonutShop
-                timeOfDay={timeOfDay}
-                onClick={() => setCitySceneType(SceneType.donutShop)}
-              />
-              <School timeOfDay={timeOfDay} />
-              <Garage timeOfDay={timeOfDay} />
-              <BenchThree />
-            </Foreground>
-            <Ground />
-          </Wrapper>
-          {canScrollRight && (
-            <NextArrowContainer onClick={handleNextArrowClick}>
-              <Arrow environmentColor="#575757" />
-            </NextArrowContainer>
-          )}
-        </Mask>
-      </div>
-    );
-  }
+  return (
+    <SceneWrapper>
+      {renderScene()}
+      <ActionBar>
+        {!isWelcomeModalOpen && citySceneType === SceneType.city && (
+          <NavigationButton
+            text="settings"
+            onClick={() => {
+              setIsSettingsMenuOpen(true);
+            }}
+          />
+        )}
+      </ActionBar>
+      {isWelcomeModalOpen && (
+        <WelcomeModal setIsWelcomeModalOpen={setIsWelcomeModalOpen} />
+      )}
+      {isSettingsMenuOpen && (
+        <>
+          <SettingsMenu>
+            <p>
+              In this realm you have the power to change the{' '}
+              <strong>time</strong> of day at will
+            </p>
 
-  return <SceneWrapper>{renderScene()}</SceneWrapper>;
+            <div
+              onChange={(e: FormEvent) => {
+                setValence(e.target.value);
+              }}
+              style={{ marginBottom: '20px', textAlign: 'left' }}
+            >
+              <RadioButton
+                id="night"
+                name="timeOfDay"
+                value="0"
+                isChecked={valence < 0.4}
+              />
+              <RadioButton
+                id="twilight"
+                name="timeOfDay"
+                value="0.4"
+                isChecked={valence < 0.8 && valence >= 0.4}
+              />
+              <RadioButton
+                id="day"
+                name="timeOfDay"
+                value="1"
+                isChecked={valence >= 1}
+              />
+            </div>
+            <NavigationButton
+              text="Done"
+              onClick={() => {
+                setIsSettingsMenuOpen(false);
+              }}
+            />
+          </SettingsMenu>
+          <Overlay />
+        </>
+      )}
+    </SceneWrapper>
+  );
 };
 
 const SceneWrapper = styled.div`
@@ -186,6 +249,14 @@ const SceneWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  width: 100%;
+`;
+const ActionBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
   width: 100%;
 `;
 const Mask = styled.div`
@@ -305,6 +376,34 @@ const Moon = styled.div`
   background-color: #fff;
   border-radius: 50%;
   box-shadow: 0px 0px 50px 30px rgba(255, 255, 255, 0.6);
+`;
+const SettingsMenu = styled.div`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 35%;
+  width: 400px;
+  background: #ffffff;
+  padding: 20px;
+  z-index: 201;
+  font-weight: 400;
+  p {
+    margin-bottom: 20px;
+  }
+`;
+const Overlay = styled.div`
+  position: absolute;
+  background: black;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+  z-index: 200;
 `;
 
 export default Cityscape;

@@ -91,6 +91,7 @@ const DonutShop: FC<{
 };
 
 const Wrapper = styled.div`
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   position: relative;

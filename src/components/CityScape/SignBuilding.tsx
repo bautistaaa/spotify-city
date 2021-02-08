@@ -174,6 +174,7 @@ const Wrapper = styled.div`
   position: relative;
   margin-left: 15px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 const Roof = styled.div<{ background: string }>`
   width: 128px;

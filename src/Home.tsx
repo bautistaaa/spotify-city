@@ -21,10 +21,8 @@ const exclude = [
   'speechiness',
   'time_signature',
 ];
-const getArtistSpotifyIds = (
-  topArtists: SpotifyApi.ArtistObjectFull[]
-): string => {
-  const spotifyIds = topArtists.slice(0, 4).map((ta) => ta.id);
+const getTopTrackIds = (topTracks: SpotifyApi.TrackObjectFull[]): string => {
+  const spotifyIds = topTracks.slice(0, 4).map((tt) => tt.id);
   return spotifyIds.join(',');
 };
 const Home = () => {
@@ -72,11 +70,9 @@ const Home = () => {
             topArtistsRequest,
             topTracksRequest,
           ]);
-          const artistIds = getArtistSpotifyIds(topArtists.items);
+          const topTracksIds = getTopTrackIds(topTracks.items);
           const trackRecommendations: SpotifyApi.RecommendationsFromSeedsResponse = await request(
-            `${config.apiUrl}/recommendations?seed_artists=${encodeURIComponent(
-              artistIds
-            )}&min_popularity=50`
+            `${config.apiUrl}/recommendations?seed_tracks=${encodeURIComponent(topTracksIds)}`
           );
 
           const ids = topTracks.items.map((tt) => tt.id);

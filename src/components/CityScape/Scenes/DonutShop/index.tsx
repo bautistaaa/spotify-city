@@ -99,7 +99,6 @@ const DonutShopInterior: FC = () => {
   return (
     <Wrapper>
       <Wall>
-        <div>{currentPreviewUrl}</div>
         <Sign>DONUT SHOP</Sign>
         <TopTracks>
           <TopTracksTitle>Recently Played</TopTracksTitle>

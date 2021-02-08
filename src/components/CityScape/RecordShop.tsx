@@ -78,6 +78,7 @@ const RecordShop: FC<{
 };
 
 const Wrapper = styled.div<{ background: string }>`
+  cursor: pointer;
   width: 175px;
   height: 90px;
   position: relative;

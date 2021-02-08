@@ -82,6 +82,7 @@ const Wrapper = styled.div<{ background: string; roof: string }>`
   background: ${({ background }) => background};
   margin-left: 10px;
   flex-shrink: 0;
+  cursor: pointer;
   &::before,
   &::after {
     content: '';
