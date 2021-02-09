@@ -12,7 +12,7 @@ const Login: FC = () => {
     <Wrapper>
       <Hero>
         <h1>
-          WELCOME TO <Bold>{`{AppName}`}</Bold>
+          WELCOME TO <Bold>{`{AppName}`}</Bold><Small>(I can't think of a name...)</Small>
         </h1>
         <h2>A more interesting way to browse your Spotify data.</h2>
         <h3>Used Scopes</h3>
@@ -68,6 +68,9 @@ const Hero = styled.div`
 `;
 const Bold = styled.span`
   font-weight: 500;
+`;
+const Small = styled.span`
+  font-size: 12px;
 `;
 
 export default Login;
