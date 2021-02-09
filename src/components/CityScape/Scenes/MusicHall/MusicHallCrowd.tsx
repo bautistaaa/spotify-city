@@ -30,6 +30,9 @@ const MusicHallCrowd: FC<{
     return (
       <>
         <Wrapper>
+          <Disclaimer>
+            If no music starts to play, refresh and come back! (Sorry..)
+          </Disclaimer>
           <StageWrapper>
             <Row>
               <Speaker>
@@ -414,5 +417,12 @@ const ArrowContainer = styled.div`
   bottom: -14px;
   left: 0;
   transform: scale(-0.3);
+`;
+const Disclaimer = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  padding: 20px;
 `;
 export default MusicHallCrowd;
