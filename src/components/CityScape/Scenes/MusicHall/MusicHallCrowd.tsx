@@ -417,6 +417,7 @@ const ArrowContainer = styled.div`
   bottom: -14px;
   left: 0;
   transform: scale(-0.3);
+  z-index: 1000;
 `;
 const Disclaimer = styled.div`
   position: absolute;
