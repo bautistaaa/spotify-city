@@ -12,7 +12,8 @@ const Login: FC = () => {
     <Wrapper>
       <Hero>
         <h1>
-          WELCOME TO <Bold>{`{AppName}`}</Bold><Small>(I can't think of a name...)</Small>
+          WELCOME TO <Bold>{`{AppName}`}</Bold>
+          <Small>(I can't think of a name...)</Small>
         </h1>
         <h2>A more interesting way to browse your Spotify data.</h2>
         <h3>Used Scopes</h3>
@@ -27,9 +28,28 @@ const Login: FC = () => {
         </ul>
         <NavigationButton text="Log In" onClick={handleClick} />
       </Hero>
+      <TwitchBlurb
+        href="https://www.twitch.com/trash_dev"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        <img src="twitch.svg" alt="" height="20" />
+        trash_dev
+      </TwitchBlurb>
     </Wrapper>
   );
 };
+const TwitchBlurb = styled.a`
+  display: flex;
+  align-items: center;
+  justify-center: center;
+  width: 800px;
+  color: black;
+  text-decoration: none;
+  img {
+    margin-right: 7px;
+  }
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,6 +79,7 @@ const Hero = styled.div`
   border: 1px solid black;
   border-radius: 3px;
   padding: 40px;
+  margin-bottom: 10px;
   ul {
     padding-left: 20px;
     > li {
