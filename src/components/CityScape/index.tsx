@@ -126,6 +126,7 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
             justifyContent: 'center',
             alignItems: 'center',
             width: '100%',
+            maxWidth: '1000px',
           }}
         >
           <Mask ref={maskRef}>
@@ -331,7 +332,7 @@ const PreviousArrowContainer = styled.div`
   cursor: pointer;
   position: absolute;
   bottom: -43px;
-  left: 90px;
+  left: 0;
   transform: scale(-0.3);
   z-index: 100;
 `;
@@ -339,7 +340,7 @@ const NextArrowContainer = styled.div`
   cursor: pointer;
   position: absolute;
   bottom: -40px;
-  right: 90px;
+  right: 0;
   transform: scale(0.3);
 `;
 const Foreground = styled.div`
