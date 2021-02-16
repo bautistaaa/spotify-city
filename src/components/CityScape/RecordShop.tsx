@@ -1,7 +1,9 @@
-import { FC } from 'react';
+import { CSSProperties, FC, MutableRefObject, useRef } from 'react';
 import styled from 'styled-components/macro';
 import Headphones from './Headphones';
 import { TimeOfDay } from '../../enums';
+import { RectResult } from '../../types';
+import useDegrees from '../../hooks/useDegrees';
 
 interface ColorPalette {
   building: string;
@@ -47,12 +49,38 @@ const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
 };
 
 const RecordShop: FC<{
+  wrapperRect?: RectResult;
+  sunMoonRect?: RectResult;
+  x: number;
   timeOfDay: TimeOfDay;
   onClick: () => void;
-}> = ({ onClick, timeOfDay }) => {
+}> = ({ wrapperRect, sunMoonRect, x, timeOfDay, onClick }) => {
   const colors = COLOR_PALETTE[timeOfDay];
+  const ref = useRef() as MutableRefObject<HTMLDivElement>;
+  const degrees = useDegrees(ref, {
+    wrapperRect,
+    sunMoonRect,
+    x,
+  });
+
+  const groundShadowStyle: CSSProperties = {
+    background: `linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )`,
+    position: `absolute`,
+    left: '0',
+    width: '100%',
+    height: '50px',
+    transformOrigin: '0 0',
+    pointerEvents: 'none',
+    transform: `skewX(${degrees}deg)`,
+    bottom: '-50px',
+  };
+
   return (
-    <Wrapper onClick={onClick} background={colors.building}>
+    <Wrapper ref={ref} onClick={onClick} background={colors.building}>
       <Billboard background={colors.billboard}>
         <Headphones fill={colors.fill} />
       </Billboard>
@@ -73,6 +101,7 @@ const RecordShop: FC<{
       <WindowBorder />
       <Window background={colors.window} />
       <Door background={colors.door} />
+      <div style={groundShadowStyle}></div>
     </Wrapper>
   );
 };

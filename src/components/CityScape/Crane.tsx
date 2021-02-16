@@ -3,9 +3,9 @@ import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
 
 const COLORS: { [K in TimeOfDay]: [primary: string, secondary: string] } = {
-  [TimeOfDay.Day]: ['#78a7c7', '#476b83'],
-  [TimeOfDay.Twilight]: ['#8b2122', '#ad3c50'],
-  [TimeOfDay.Night]: ['#374971', '#415b8f'],
+  [TimeOfDay.Day]: ['#7088b9', '#a0c8e3'],
+  [TimeOfDay.Twilight]: ['#9d3e3f', '#b45669'],
+  [TimeOfDay.Night]: ['#374971', '#3b5589'],
 };
 
 const Crane: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {

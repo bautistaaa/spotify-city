@@ -1,56 +1,49 @@
 import { RefObject, useEffect, useState } from 'react';
 import getPositionRelativeToParent from '../utils/getPositionRelativeToParent';
 import getDegreesFromCoordinates from '../utils/getDegreesFromCoordinates';
-import { Distance, TimeOfDay } from '../enums';
 import { RectResult } from '../types';
 
 interface Input {
-  sunRect?: RectResult;
-  moonRect?: RectResult;
+  sunMoonRect?: RectResult;
   wrapperRect?: RectResult;
-  distance: Distance;
-  timeOfDay: TimeOfDay;
+  x: number;
 }
 const useDegrees = <T extends HTMLElement>(
   ref: RefObject<T>,
-  { sunRect, moonRect, wrapperRect, distance, timeOfDay }: Input
+  { sunMoonRect, wrapperRect, x }: Input
 ): number => {
-  const [degrees, setDegrees] = useState<number>(0);
-
+  const [degrees, setDegrees] = useState(0);
   useEffect(() => {
-    if (ref.current && wrapperRect && (sunRect || moonRect)) {
-      const planetRect = timeOfDay === TimeOfDay.Night ? moonRect : sunRect;
+    if (ref.current && wrapperRect && sunMoonRect) {
       const {
-        width: mountainWidth,
-        height: mountainHeight,
+        width: buildingWidth,
+        height: buildingHeight,
       } = ref.current.getBoundingClientRect();
 
-      if (distance === Distance.Close || distance === Distance.Closest) {
-        const relativeMountainPositions = getPositionRelativeToParent(
-          wrapperRect,
-          ref.current.getBoundingClientRect()
-        );
-        const relativeSunPositions = getPositionRelativeToParent(
-          wrapperRect,
-          planetRect ?? ({} as RectResult)
-        );
+      const relativeBuildingPositions = getPositionRelativeToParent(
+        wrapperRect,
+        ref.current.getBoundingClientRect()
+      );
+      const relativeSunPositions = getPositionRelativeToParent(
+        wrapperRect,
+        sunMoonRect ?? ({} as RectResult)
+      );
 
-        const ground = wrapperRect.height - 50;
-        const degrees = getDegreesFromCoordinates(
-          {
-            x: relativeSunPositions.left + 150 / 2,
-            y: relativeSunPositions.top + 150 / 2,
-          },
-          {
-            x: relativeMountainPositions.left + mountainWidth / 2,
-            y: ground - mountainHeight / 2,
-          }
-        );
+      const ground = wrapperRect.height - 50;
+      const degrees = getDegreesFromCoordinates(
+        {
+          x: relativeSunPositions.left + 100 / 2,
+          y: relativeSunPositions.top + 100 / 2,
+        },
+        {
+          x: relativeBuildingPositions.left + buildingWidth / 2,
+          y: ground - buildingHeight / 2,
+        }
+      );
 
-        setDegrees(degrees);
-      }
+      setDegrees(degrees);
     }
-  }, [ref, wrapperRect, sunRect, moonRect, timeOfDay, distance]);
+  }, [ref, wrapperRect, sunMoonRect, x]);
 
   return degrees;
 };

@@ -27,17 +27,22 @@ import Hotel from './Scenes/Hotel';
 import RecordShopInterior from './Scenes/RecordShop/index';
 import MusicHallScene from './Scenes/MusicHall';
 import { SceneType, TimeOfDay } from '../../enums';
-import useRect from '../../hooks/useRect2';
+import useRect from '../../hooks/useRect3';
 import { AudioFeature } from '../../AppContext';
 import getTimeOfDay from '../../utils/getTimeOfDay';
 import { useCitySettingContext } from '../../CitySettingsContext';
 import NavigationButton from '../NavigationButton';
 import RadioButton from '../RadioButton';
 
+const GROUND_COLORS: { [K in TimeOfDay]: string } = {
+  [TimeOfDay.Day]: '#c8c6c6',
+  [TimeOfDay.Twilight]: '#575757',
+  [TimeOfDay.Night]: '#2c2c2c',
+};
 const BUILDING_COLORS: { [K in TimeOfDay]: string } = {
-  [TimeOfDay.Day]: '#78a7c7',
-  [TimeOfDay.Twilight]: '#ad3c50',
-  [TimeOfDay.Night]: ' #646f9e',
+  [TimeOfDay.Day]: '#a0c8e3',
+  [TimeOfDay.Twilight]: '#b45669',
+  [TimeOfDay.Night]: '#3b5589',
 };
 const SKY_COLORS: { [K in TimeOfDay]: string } = {
   [TimeOfDay.Day]: 'linear-gradient(180deg, #ade0ff 0%, #e4f4ff 100%)',
@@ -50,6 +55,7 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   const { citySceneType, setCitySceneType } = useCitySettingContext();
   const [valence, setValence] = useState(audioFeatures.valence);
 
+  const sunMoonRef = useRef<HTMLElement>(null);
   const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
   const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
   const timeOfDay = getTimeOfDay(valence);
@@ -58,10 +64,12 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   const maskRef = useRef(null);
   const scrollableRef = useRef(null);
   const [x, setX] = useState(0);
-  const maskRect = useRect(maskRef, x);
+  const maskRect = useRect(maskRef, [x]);
   const scrollableRect = useRect(scrollableRef, x);
   const maskWidth = maskRect.width;
   const scrollableWidth = scrollableRect.width;
+  const sunMoonRect = useRect(sunMoonRef, x);
+  const groundColor = GROUND_COLORS[timeOfDay];
 
   const canScrollLeft = x < 0;
   const canScrollRight = maskWidth - x < scrollableWidth;
@@ -112,6 +120,7 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
       return (
         <div
           style={{
+            position: 'relative',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
@@ -120,13 +129,8 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
           }}
         >
           <Mask ref={maskRef}>
-            {canScrollLeft && (
-              <PreviousArrowContainer onClick={handlePreviousArrowClick}>
-                <Arrow environmentColor="#575757" />
-              </PreviousArrowContainer>
-            )}
             <Wrapper ref={scrollableRef} pixelsToMove={x} background={skyColor}>
-              <Moon />
+              <Moon ref={sunMoonRef as any} />
               <BirdOne background={buildingColor} />
               <BirdTwo background={buildingColor} />
               <Background>
@@ -144,37 +148,74 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
               </Background>
               <Foreground>
                 <MusicHall
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
                   onClick={() => setCitySceneType(SceneType.musicHall)}
                   timeOfDay={timeOfDay}
                 />
                 <BenchOne />
-                <Shop timeOfDay={timeOfDay} />
-                <Complex timeOfDay={timeOfDay} />
+                <Shop
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
+                  timeOfDay={timeOfDay}
+                />
+                <Complex
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
+                  timeOfDay={timeOfDay}
+                />
                 <BenchTwo />
                 <RecordShop
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
                   timeOfDay={timeOfDay}
                   onClick={() => setCitySceneType(SceneType.recordShop)}
                 />
                 <SignBuilding
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
                   timeOfDay={timeOfDay}
                   onClick={() => setCitySceneType(SceneType.hotel)}
                 />
                 <DonutShop
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
                   timeOfDay={timeOfDay}
                   onClick={() => setCitySceneType(SceneType.donutShop)}
                 />
-                <School timeOfDay={timeOfDay} />
-                <Garage timeOfDay={timeOfDay} />
+                <School
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
+                  timeOfDay={timeOfDay}
+                />
+                <Garage
+                  wrapperRect={scrollableRect}
+                  sunMoonRect={sunMoonRect}
+                  x={x}
+                  timeOfDay={timeOfDay}
+                />
                 <BenchThree />
               </Foreground>
-              <Ground />
+              <Ground color={groundColor} />
             </Wrapper>
-            {canScrollRight && (
-              <NextArrowContainer onClick={handleNextArrowClick}>
-                <Arrow environmentColor="#575757" />
-              </NextArrowContainer>
-            )}
           </Mask>
+          {canScrollLeft && (
+            <PreviousArrowContainer onClick={handlePreviousArrowClick}>
+              <Arrow environmentColor="#fff" />
+            </PreviousArrowContainer>
+          )}
+          {canScrollRight && (
+            <NextArrowContainer onClick={handleNextArrowClick}>
+              <Arrow environmentColor="#fff" />
+            </NextArrowContainer>
+          )}
         </div>
       );
     }
@@ -281,25 +322,24 @@ const Wrapper = styled.div<{ pixelsToMove: number; background: string }>`
   height: 100%;
   width: 1500px;
   background: ${({ background }) => background};
-  //background: linear-gradient(rgb(135, 60, 119) 0%, rgb(236, 163, 139) 100%);
   margin: 0 auto;
   position: relative;
   transform: ${({ pixelsToMove }) => `translateX(${pixelsToMove}px);`};
   transition: transform 0.3s ease-in;
 `;
 const PreviousArrowContainer = styled.div`
+  cursor: pointer;
   position: absolute;
-  bottom: -14px;
-  left: 0px;
+  bottom: -43px;
+  left: 90px;
   transform: scale(-0.3);
   z-index: 100;
-  cursor: pointer;
 `;
 const NextArrowContainer = styled.div`
   cursor: pointer;
   position: absolute;
-  bottom: -14px;
-  right: 0px;
+  bottom: -40px;
+  right: 90px;
   transform: scale(0.3);
 `;
 const Foreground = styled.div`
@@ -359,18 +399,17 @@ const Background = styled.div`
   left: 0;
   right: 0;
   bottom: 28px;
-  opacity: 0.5;
 `;
-const Ground = styled.div`
+const Ground = styled.div<{ color: string }>`
   height: 30px;
   width: 100%;
-  background: #575757;
+  background: ${({ color }) => color};
 `;
 const Moon = styled.div`
   position: absolute;
   opacity: 0.8;
   top: 100px;
-  left: 110px;
+  left: 310px;
   width: 100px;
   height: 100px;
   background-color: #fff;

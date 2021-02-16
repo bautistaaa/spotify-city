@@ -1,4 +1,4 @@
-import { RectResult } from '../hooks/useRect';
+import { RectResult } from '../types';
 
 // margin 199
 export type RelativePositioning = {

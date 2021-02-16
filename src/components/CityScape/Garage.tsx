@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { CSSProperties, FC, MutableRefObject, useRef } from 'react';
 import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
+import useDegrees from '../../hooks/useDegrees';
+import { RectResult } from '../../types';
 
 interface ColorPalette {
   building: string;
@@ -40,11 +42,38 @@ const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
     roof: '#903a49',
   },
 };
-const Garage: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+const Garage: FC<{
+  wrapperRect?: RectResult;
+  sunMoonRect?: RectResult;
+  x: number;
+  timeOfDay: TimeOfDay;
+}> = ({ wrapperRect, sunMoonRect, x, timeOfDay }) => {
   const colors = COLOR_PALETTE[timeOfDay];
+  const ref = useRef() as MutableRefObject<HTMLDivElement>;
+  const degrees = useDegrees(ref, {
+    wrapperRect,
+    sunMoonRect,
+    x,
+  });
+
+  const groundShadowStyle: CSSProperties = {
+    background: `linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )`,
+    position: `absolute`,
+    left: '0',
+    width: '100%',
+    height: '50px',
+    transformOrigin: '0 0',
+    pointerEvents: 'none',
+    transform: `skewX(${degrees}deg)`,
+    bottom: '-50px',
+  };
 
   return (
-    <Wrapper background={colors.building}>
+    <Wrapper ref={ref} background={colors.building}>
       <Roof background={colors.roof} timeOfDay={timeOfDay} />
       <Awning awningFront={colors.awningFront} awning={colors.awning} />
       <AwningShadow timeOfDay={timeOfDay} />
@@ -53,6 +82,7 @@ const Garage: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
       <GarageDoor background={colors.garage} window={colors.window}>
         <GarageDoorWindownFrame />
       </GarageDoor>
+      <div style={groundShadowStyle}></div>
     </Wrapper>
   );
 };

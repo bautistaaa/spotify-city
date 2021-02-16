@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import { CSSProperties, FC, MutableRefObject, useRef } from 'react';
 import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
+import useDegrees from '../../hooks/useDegrees';
+import { RectResult } from '../../types';
 
 interface ColorPalette {
   concrete: string;
@@ -41,11 +43,38 @@ const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
   },
 };
 
-const Complex: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
+const Complex: FC<{
+  wrapperRect?: RectResult;
+  sunMoonRect?: RectResult;
+  x: number;
+  timeOfDay: TimeOfDay;
+}> = ({ wrapperRect, sunMoonRect, x, timeOfDay }) => {
   const colors = COLOR_PALETTE[timeOfDay];
+  const ref = useRef() as MutableRefObject<HTMLDivElement>;
+  const degrees = useDegrees(ref, {
+    wrapperRect,
+    sunMoonRect,
+    x,
+  });
+
+  const groundShadowStyle: CSSProperties = {
+    background: `linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )`,
+    position: `absolute`,
+    left: '0',
+    width: '100%',
+    height: '50px',
+    transformOrigin: '0 0',
+    pointerEvents: 'none',
+    transform: `skewX(${degrees}deg)`,
+    bottom: '-50px',
+  };
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <Roof background={colors.concrete} />
       <RoofShadow />
       <ThirdFloor background={colors.building}>
@@ -70,6 +99,7 @@ const Complex: FC<{ timeOfDay: TimeOfDay }> = ({ timeOfDay }) => {
         </BigWindow>
         <Plant bushColor={colors.bush} potColor={colors.pot} />
       </FirstFloor>
+      <div style={groundShadowStyle}></div>
     </Wrapper>
   );
 };

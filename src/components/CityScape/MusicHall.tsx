@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC, MutableRefObject, useRef } from 'react';
 import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
+import useDegrees from '../../hooks/useDegrees';
+import { RectResult } from '../../types';
 
 interface ColorPalette {
   building: string;
@@ -29,14 +31,41 @@ const COLOR_PALETTE: { [K in TimeOfDay]: ColorPalette } = {
   },
 };
 
-const MusicHall: FC<{ timeOfDay: TimeOfDay; onClick: () => void }> = ({
-  timeOfDay,
-  onClick,
-}) => {
+const MusicHall: FC<{
+  wrapperRect?: RectResult;
+  sunMoonRect?: RectResult;
+  timeOfDay: TimeOfDay;
+  onClick: () => void;
+  x: number;
+}> = ({ wrapperRect, sunMoonRect, timeOfDay, onClick, x }) => {
   const colorPalette = COLOR_PALETTE[timeOfDay];
+  const ref = useRef() as MutableRefObject<HTMLDivElement>;
+
+  const degrees = useDegrees(ref, {
+    wrapperRect,
+    sunMoonRect,
+    x,
+  });
+
+  const groundShadowStyle: CSSProperties = {
+    background: `linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )`,
+    position: `absolute`,
+    left: '0',
+    width: '100%',
+    height: '50px',
+    transformOrigin: '0 0',
+    pointerEvents: 'none',
+    transform: `skewX(${degrees}deg)`,
+    bottom: '-50px',
+  };
 
   return (
     <Wrapper
+      ref={ref}
       background={colorPalette.building}
       roof={colorPalette.roof}
       onClick={() => onClick()}
@@ -68,6 +97,7 @@ const MusicHall: FC<{ timeOfDay: TimeOfDay; onClick: () => void }> = ({
           <Spine />
         </Barrier>
       </BottomRow>
+      <div style={groundShadowStyle}></div>
     </Wrapper>
   );
 };
