@@ -36,7 +36,10 @@ const useDegrees = <T extends HTMLElement>(
           y: relativeSunPositions.top + 100 / 2,
         },
         {
-          x: relativeBuildingPositions.left + buildingWidth / 2,
+          x:
+            x < 0
+              ? 500 + relativeBuildingPositions.left + buildingWidth / 2
+              : relativeBuildingPositions.left + buildingWidth / 2,
           y: ground - buildingHeight / 2,
         }
       );
