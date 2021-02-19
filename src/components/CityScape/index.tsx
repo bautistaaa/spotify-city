@@ -33,6 +33,7 @@ import getTimeOfDay from '../../utils/getTimeOfDay';
 import { useCitySettingContext } from '../../CitySettingsContext';
 import NavigationButton from '../NavigationButton';
 import RadioButton from '../RadioButton';
+import getRandomIntFromInterval from '../../utils/getRandomIntFromInterval';
 
 const GROUND_COLORS: { [K in TimeOfDay]: string } = {
   [TimeOfDay.Day]: '#c8c6c6',
@@ -50,6 +51,10 @@ const SKY_COLORS: { [K in TimeOfDay]: string } = {
     'linear-gradient(rgb(135, 60, 119) 0%, rgb(236, 163, 139) 100%)',
   [TimeOfDay.Night]:
     'linear-gradient(rgb(10, 27, 78) 0%, rgb(26, 98, 161) 100%)',
+};
+const planetOverrides = {
+  left: `${getRandomIntFromInterval(0, 700)}px`,
+  top: `${getRandomIntFromInterval(10, 100)}px`,
 };
 const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
   const { citySceneType, setCitySceneType } = useCitySettingContext();
@@ -85,7 +90,6 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
     const move = Math.abs(scroll) > x + maskWidth ? scroll : 0;
     setX(move);
   };
-
   const renderScene = () => {
     if (citySceneType === SceneType.musicHall) {
       return (
@@ -130,8 +134,12 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
           }}
         >
           <Mask ref={maskRef}>
-            <Wrapper ref={scrollableRef} pixelsToMove={x} background={skyColor}>
-              <Moon ref={sunMoonRef as any} />
+            <Wrapper
+              ref={scrollableRef}
+              pixelsToMove={x}
+              background={skyColor}
+            >
+              <Moon ref={sunMoonRef as any} style={planetOverrides} />
               <BirdOne background={buildingColor} />
               <BirdTwo background={buildingColor} />
               <Background>

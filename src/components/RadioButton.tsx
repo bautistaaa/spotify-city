@@ -14,7 +14,7 @@ const RadioButton: FC<{
         name={name}
         value={value}
         type="radio"
-        checked={isChecked}
+        defaultChecked={isChecked}
       />
       <label htmlFor={id} className="radio-label">
         {id}
