@@ -30,10 +30,10 @@ import { SceneType, TimeOfDay } from '../../enums';
 import useRect from '../../hooks/useRect3';
 import { AudioFeature } from '../../AppContext';
 import getTimeOfDay from '../../utils/getTimeOfDay';
-import { useCitySettingContext } from '../../CitySettingsContext';
 import NavigationButton from '../NavigationButton';
 import RadioButton from '../RadioButton';
 import getRandomIntFromInterval from '../../utils/getRandomIntFromInterval';
+import { useCitySettingContext } from '../../CitySettingsContext';
 
 const GROUND_COLORS: { [K in TimeOfDay]: string } = {
   [TimeOfDay.Day]: '#c8c6c6',
@@ -134,11 +134,7 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
           }}
         >
           <Mask ref={maskRef}>
-            <Wrapper
-              ref={scrollableRef}
-              pixelsToMove={x}
-              background={skyColor}
-            >
+            <Wrapper ref={scrollableRef} pixelsToMove={x} background={skyColor}>
               <Moon ref={sunMoonRef as any} style={planetOverrides} />
               <BirdOne background={buildingColor} />
               <BirdTwo background={buildingColor} />

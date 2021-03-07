@@ -6,41 +6,17 @@ import Arrow from '../../Arrow';
 import truncateStringByLimit from '../../../../utils/truncateStringByLimit';
 import { useCitySettingContext } from '../../../../CitySettingsContext';
 import { SceneType } from '../../../../enums';
-import useIframe from '../../../../hooks/useIframe';
 
 const RecentlyPlayedTrack: FC<{
   imageSrc: string;
   name: string;
   previewUrl: string | null;
-  currentPreviewUrl: string | null;
-  setCurrentPreviewUrl: React.Dispatch<React.SetStateAction<string | null>>;
   title: string;
   uri: string;
-}> = ({
-  imageSrc,
-  name,
-  previewUrl: trackPreviewUrl,
-  currentPreviewUrl,
-  setCurrentPreviewUrl,
-  title,
-  uri,
-}) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  id: string;
+}> = ({ imageSrc, name, previewUrl: trackPreviewUrl, title, uri, id }) => {
+  const { setCurrentTrack } = useCitySettingContext();
 
-  useIframe(previewUrl);
-  useEffect(() => {
-    setCurrentPreviewUrl(previewUrl);
-  }, [previewUrl, setCurrentPreviewUrl]);
-
-  const handleButtonClick = () => {
-    setPreviewUrl((previewUrl) => {
-      if (previewUrl) {
-        return null;
-      }
-
-      return trackPreviewUrl;
-    });
-  };
 
   return (
     <Track>
@@ -51,24 +27,17 @@ const RecentlyPlayedTrack: FC<{
       </TrackInfo>
       <SlidingShelf>
         <ButtonsContainer>
-          {(!currentPreviewUrl || previewUrl !== currentPreviewUrl) && (
-            <PreviewButton
-              onClick={handleButtonClick}
-              disabled={!trackPreviewUrl}
-              title={
-                !trackPreviewUrl
-                  ? 'No Preview Available'
-                  : 'Click to Preview Song'
-              }
-            >
-              <img height="25" src="preview.svg" alt="Open In Spotify" />
-            </PreviewButton>
-          )}
-          {currentPreviewUrl && previewUrl === currentPreviewUrl && (
-            <PreviewButton onClick={handleButtonClick}>
-              <img height="25" src="pause.svg" alt="Pause Preview" />
-            </PreviewButton>
-          )}
+          <PreviewButton
+            onClick={() => setCurrentTrack({ uri, id })}
+            disabled={!trackPreviewUrl}
+            title={
+              !trackPreviewUrl
+                ? 'No Preview Available'
+                : 'Click to Preview Song'
+            }
+          >
+            <img height="25" src="preview.svg" alt="Open In Spotify" />
+          </PreviewButton>
           <SpotifyButton href={uri} title="Open In Spotify">
             <img height="25" src="spotify.svg" alt="Open In Spotify" />
           </SpotifyButton>
@@ -110,6 +79,7 @@ const DonutShopInterior: FC = () => {
                 artists,
                 preview_url,
                 uri,
+                id,
               },
             } = rp;
             return (
@@ -120,8 +90,7 @@ const DonutShopInterior: FC = () => {
                 imageSrc={images?.[2]?.url}
                 previewUrl={preview_url}
                 uri={uri}
-                currentPreviewUrl={currentPreviewUrl}
-                setCurrentPreviewUrl={setCurrentPreviewUrl}
+                id={id}
               />
             );
           })}

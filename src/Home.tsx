@@ -6,6 +6,7 @@ import config from './config';
 import useLocalStorage from './hooks/useLocalStorage';
 import request from './services/request';
 import Cityscape from './components/CityScape';
+import Player from './components/Player';
 import { AudioFeature, useAppContext } from './AppContext';
 import { CitySettingsProvider } from './CitySettingsContext';
 
@@ -72,7 +73,9 @@ const Home = () => {
           ]);
           const topTracksIds = getTopTrackIds(topTracks.items);
           const trackRecommendations: SpotifyApi.RecommendationsFromSeedsResponse = await request(
-            `${config.apiUrl}/recommendations?seed_tracks=${encodeURIComponent(topTracksIds)}`
+            `${config.apiUrl}/recommendations?seed_tracks=${encodeURIComponent(
+              topTracksIds
+            )}`
           );
 
           const ids = topTracks.items.map((tt) => tt.id);
@@ -125,6 +128,9 @@ const Home = () => {
           {audioFeatures && <Cityscape audioFeatures={audioFeatures} />}
         </Row>
       </Wrapper>
+      <PlayerWrapper>
+        <Player />
+      </PlayerWrapper>
     </CitySettingsProvider>
   );
 };
@@ -135,6 +141,12 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
+`;
+const PlayerWrapper = styled.div`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
 `;
 const Row = styled.div`
   display: flex;

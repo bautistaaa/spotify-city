@@ -1,34 +1,19 @@
-import {
-  ForwardRefRenderFunction,
-  MutableRefObject,
-  forwardRef,
-  useState,
-} from 'react';
+import { ForwardRefRenderFunction, MutableRefObject, forwardRef } from 'react';
 import styled from 'styled-components/macro';
-import useIframe from '../../hooks/useIframe';
+import { useCitySettingContext } from '../../CitySettingsContext';
 
 const CdCase: ForwardRefRenderFunction<
   MutableRefObject<HTMLDivElement>,
   { track: SpotifyApi.TrackObjectFull }
 > = ({ track }, ref) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const { setCurrentTrack } = useCitySettingContext();
   const imageSrc = track.album.images?.[0]?.url;
-  const trackPreviewUrl = track.preview_url;
-
-  useIframe(previewUrl);
-
-  const handleButtonClick = () => {
-    setPreviewUrl((previewUrl) => {
-      if (previewUrl) {
-        return null;
-      }
-
-      return trackPreviewUrl;
-    });
+  const handlePlayButtonClick = () => {
+    setCurrentTrack({ uri: track?.uri, id: track?.id });
   };
 
   return (
-    <Container ref={ref}>
+    <Container ref={ref as any}>
       <Wrapper>
         <Cover>
           <AlbumImage src={imageSrc} />
@@ -40,24 +25,9 @@ const CdCase: ForwardRefRenderFunction<
         <Artist>{track.artists?.[0]?.name}</Artist>
         <Title>{track.name}</Title>
         <ButtonsContainer>
-          {!previewUrl && (
-            <PreviewButton
-              onClick={handleButtonClick}
-              disabled={!trackPreviewUrl}
-              title={
-                !trackPreviewUrl
-                  ? 'No Preview Available'
-                  : 'Click to Preview Song'
-              }
-            >
-              <img height="25" src="preview.svg" alt="Open In Spotify" />
-            </PreviewButton>
-          )}
-          {previewUrl && (
-            <PreviewButton onClick={handleButtonClick}>
-              <img height="25" src="pause.svg" alt="Pause Preview" />
-            </PreviewButton>
-          )}
+          <PreviewButton onClick={handlePlayButtonClick}>
+            <img height="25" src="preview.svg" alt="Open In Spotify" />
+          </PreviewButton>
           <SpotifyButton href={track.uri} title="Open In Spotify">
             <img height="25" src="spotify.svg" alt="Open In Spotify" />
           </SpotifyButton>
