@@ -1,14 +1,15 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import Slider from './Slider';
 import VolumeSlider from './VolumeSlider';
 import Play from './button/Play';
 import PlayerButton from './button/PlayerButton';
-import Previous from './button/Previous';
-import Next from './button/Next';
+
+import Seek from './button/Seek';
 import { useCitySettingContext } from '../../CitySettingsContext';
 import loadSpotifyScript from '../../utils/loadSpotifyScript';
+import request from '../../services/request';
+import config from '../../config';
 
 const Player: FC = () => {
   const { currentTrack } = useCitySettingContext();
@@ -24,7 +25,6 @@ const Player: FC = () => {
   const handlePlayButtonClicked = () => {
     // @ts-ignore
     setPlayerState((state) => {
-      console.log(state?.paused);
       return {
         ...state,
         paused: !state?.paused,
@@ -68,6 +68,11 @@ const Player: FC = () => {
 
       player.current?.connect();
     }
+    if (player.current) {
+      player.current?.addListener('player_state_changed', (state) => {
+        setPlayerState(state);
+      });
+    }
   }, [player.current, scriptReady]);
 
   useEffect(() => {
@@ -87,7 +92,6 @@ const Player: FC = () => {
           }
         );
         const state = await player.current?.getCurrentState();
-        console.log(state);
         if (state) {
           setPlayerState(state);
         }
@@ -109,45 +113,77 @@ const Player: FC = () => {
 
   return (
     <Wrapper>
-      <LeftColumn>
-        <Metadata>
-          <AlbumArt
-            src={
-              playerState?.track_window?.current_track?.album?.images?.[1]?.url
-            }
-          />
-          <SongInfo>
-            <Title>{playerState?.track_window?.current_track?.name}</Title>
-            <Artist>
-              {playerState?.track_window?.current_track?.artists?.[0]?.name}
-            </Artist>
-          </SongInfo>
-        </Metadata>
-      </LeftColumn>
-      <Controls>
-        <TopRow>
-          <ButtonsWrapper>
-            <Previous />
-            <PlayerButton onClick={handlePlayButtonClicked}>
-              <Play isPlaying={!playerState?.paused} />
-            </PlayerButton>
-            <Next />
-          </ButtonsWrapper>
-        </TopRow>
-        <Slider />
-      </Controls>
-      <RightColumn>
-        <VolumeSlider
-          volume={volume}
-          setVolume={setVolume}
-          isMuted={isMuted}
-          setIsMuted={setIsMuted}
-        />
-      </RightColumn>
+      {playerState && (
+        <>
+          <LeftColumn>
+            <Metadata>
+              <AlbumArt
+                src={
+                  playerState?.track_window?.current_track?.album?.images?.[1]
+                    ?.url
+                }
+              />
+              <SongInfo>
+                <Title>{playerState?.track_window?.current_track?.name}</Title>
+                <Artist>
+                  {playerState?.track_window?.current_track?.artists?.[0]?.name}
+                </Artist>
+              </SongInfo>
+            </Metadata>
+          </LeftColumn>
+          <Controls>
+            <TopRow>
+              <ButtonsWrapper>
+                <RewindButton
+                  onClick={() =>
+                    player?.current?.seek(playerState.position - 10 * 1000)
+                  }
+                >
+                  <Seek />
+                </RewindButton>
+                <PlayerButton onClick={handlePlayButtonClicked}>
+                  <Play
+                    isPlaying={
+                      playerState?.paused !== undefined && !playerState?.paused
+                    }
+                  />
+                </PlayerButton>
+                <ForwardButton
+                  onClick={() =>
+                    player?.current?.seek(playerState.position + 10 * 1000)
+                  }
+                >
+                  <Seek forward />
+                </ForwardButton>
+              </ButtonsWrapper>
+            </TopRow>
+          </Controls>
+          <RightColumn>
+            <VolumeSlider
+              volume={volume}
+              setVolume={setVolume}
+              isMuted={isMuted}
+              setIsMuted={setIsMuted}
+            />
+          </RightColumn>
+        </>
+      )}
     </Wrapper>
   );
 };
 
+const RewindButton = styled.button`
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+`;
+const ForwardButton = styled.button`
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+`;
 const Metadata = styled.div`
   display: flex;
   align-items: center;
@@ -187,7 +223,7 @@ const ButtonsWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 100px;
+  width: 150px;
 `;
 const Controls = styled.div`
   display: flex;

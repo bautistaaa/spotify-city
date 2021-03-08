@@ -13,6 +13,7 @@ const Wrapper = styled.div`
   width: 32px;
   border-radius: 32px;
   border: 1px solid black;
+  cursor: pointer;
 `;
 
 export default PlayerButton;

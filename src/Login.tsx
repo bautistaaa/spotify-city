@@ -18,6 +18,7 @@ const Login: FC = () => {
         <h2>A more interesting way to browse your Spotify data.</h2>
         <h3>Used Scopes</h3>
         <p>
+          This app is pretty permission hungry because it acts just like a spotify web player.
           Scopes enable the application to access Spotify API endpoints. The set
           of scopes used in this application are:
         </p>
@@ -25,6 +26,7 @@ const Login: FC = () => {
           <li>user-read-recently-played</li>
           <li>user-top-read</li>
           <li>streaming</li>
+          <li>user-library-modify</li>
         </ul>
         <NavigationButton text="Log In" onClick={handleClick} />
       </Hero>

@@ -12,7 +12,8 @@ const config: Config = {
   authorizeUrl: 'https://accounts.spotify.com/authorize',
   clientId: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
   clientSecret: process.env.REACT_APP_SPOTIFY_CLIENT_SECRET,
-  scopes: 'user-read-recently-played user-top-read streaming',
+  scopes:
+    'user-read-recently-played user-top-read streaming user-library-modify',
   tokenUrl: 'https://accounts.spotify.com/api/token',
 };
 

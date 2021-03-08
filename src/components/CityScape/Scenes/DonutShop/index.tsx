@@ -6,6 +6,7 @@ import Arrow from '../../Arrow';
 import truncateStringByLimit from '../../../../utils/truncateStringByLimit';
 import { useCitySettingContext } from '../../../../CitySettingsContext';
 import { SceneType } from '../../../../enums';
+import useLocalStorage from '../../../../hooks/useLocalStorage';
 
 const RecentlyPlayedTrack: FC<{
   imageSrc: string;
@@ -16,7 +17,6 @@ const RecentlyPlayedTrack: FC<{
   id: string;
 }> = ({ imageSrc, name, previewUrl: trackPreviewUrl, title, uri, id }) => {
   const { setCurrentTrack } = useCitySettingContext();
-
 
   return (
     <Track>
@@ -51,15 +51,19 @@ const DonutShopInterior: FC = () => {
   const [recentlyPlayed, setRecentlyPlayed] = useState<
     SpotifyApi.UsersRecentlyPlayedTracksResponse | undefined
   >();
-  const [currentPreviewUrl, setCurrentPreviewUrl] = useState<string | null>(
-    null
-  );
+  const [, setToken] = useLocalStorage('token', '');
+
   useEffect(() => {
     const fetchRecentlyPlayedTracks = async () => {
-      const recentlyPlayedResponse: SpotifyApi.UsersRecentlyPlayedTracksResponse = await request(
-        `${config.apiUrl}/me/player/recently-played`
-      );
-      setRecentlyPlayed(recentlyPlayedResponse);
+      try {
+        const recentlyPlayedResponse: SpotifyApi.UsersRecentlyPlayedTracksResponse = await request(
+          `${config.apiUrl}/me/player/recently-played`
+        );
+        setRecentlyPlayed(recentlyPlayedResponse);
+      } catch (e) {
+        window.location.reload();
+        setToken('');
+      }
     };
 
     fetchRecentlyPlayedTracks();
@@ -71,7 +75,7 @@ const DonutShopInterior: FC = () => {
         <Sign>DONUT SHOP</Sign>
         <TopTracks>
           <TopTracksTitle>Recently Played</TopTracksTitle>
-          {recentlyPlayed?.items.map((rp, i) => {
+          {recentlyPlayed?.items?.map((rp, i) => {
             const {
               track: {
                 name,
