@@ -12,28 +12,37 @@ export const NavigationMappings: { [K in SceneType]: SceneType[] } = {
   [SceneType.hotelPlaylists]: [SceneType.city, SceneType.hotel],
 };
 
+export interface TrackData {
+  uri: string;
+  id: string;
+}
 interface CitySettingsContextValues {
   citySceneType: SceneType;
   setCitySceneType: React.Dispatch<React.SetStateAction<SceneType>>;
-  //navigationButtons: SceneType[];
-  //setNavigationButtons: React.Dispatch<React.SetStateAction<SceneType[]>>;
+  currentTrack: TrackData;
+  setCurrentTrack: React.Dispatch<React.SetStateAction<TrackData>>;
 }
 
 const CitySettingsContext = React.createContext<CitySettingsContextValues>({
   citySceneType: SceneType.city,
   setCitySceneType: () => {},
-  //navigationButtons: [],
-  //setNavigationButtons: () => {},
+  currentTrack: { id: '', uri: '' },
+  setCurrentTrack: () => {},
 });
 
 const useCitySettingContext = () => useContext(CitySettingsContext);
 
 const CitySettingsProvider: FC = ({ children }) => {
-  //const [navigationButtons, setNavigationButtons] = useState<SceneType[]>();
   const [citySceneType, setCitySceneType] = useState<SceneType>(SceneType.city);
+  const [currentTrack, setCurrentTrack] = useState<TrackData>({
+    uri: '',
+    id: '',
+  });
   const value = {
     citySceneType,
     setCitySceneType,
+    currentTrack,
+    setCurrentTrack,
   };
 
   return (

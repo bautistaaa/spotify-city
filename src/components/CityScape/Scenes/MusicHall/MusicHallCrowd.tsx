@@ -4,7 +4,6 @@ import { MusicHallSceneType, TrackData } from '.';
 import makeItPhony, { PhoneDistance } from '../../../../utils/makeItPhony';
 import makeItHeady from '../../../../utils/makeItHeady';
 
-import SpotifyPlayer from '../../SpotifyPlayer';
 import styled from 'styled-components/macro';
 import { ColorInfo, KEY_HUES } from '../../../../constants/colors';
 import Arrow from '../../Arrow';
@@ -18,9 +17,8 @@ const renderClosestHeads = (colorInfo: ColorInfo) => {
 
 const MusicHallCrowd: FC<{
   setScene: React.Dispatch<React.SetStateAction<MusicHallSceneType>>;
-  trackData: TrackData;
   trackFeatures: SpotifyApi.AudioFeaturesResponse | undefined;
-}> = ({ setScene, trackData, trackFeatures }) => {
+}> = ({ setScene, trackFeatures }) => {
   if (trackFeatures) {
     const colorInfo = KEY_HUES[trackFeatures.key];
     const calc = trackFeatures.tempo / 60;
@@ -93,7 +91,6 @@ const MusicHallCrowd: FC<{
             <Arrow environmentColor="#28242b" />
           </ArrowContainer>
         </Wrapper>
-        <SpotifyPlayer track={trackData.uri} />
       </>
     );
   }

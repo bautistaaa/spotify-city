@@ -14,7 +14,6 @@ export type Action =
   | { type: typeof VALENCE_CHANGED; payload: number };
 
 export function reducer(state: AudioFeature, action: Action) {
-  console.log(state);
   switch (action.type) {
     case ENERGY_CHANGED:
       return {
