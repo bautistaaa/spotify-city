@@ -67,7 +67,7 @@ const DonutShopInterior: FC = () => {
     };
 
     fetchRecentlyPlayedTracks();
-  }, []);
+  }, [setToken]);
 
   return (
     <Wrapper>

@@ -8,8 +8,6 @@ import PlayerButton from './button/PlayerButton';
 import Seek from './button/Seek';
 import { useCitySettingContext } from '../../CitySettingsContext';
 import loadSpotifyScript from '../../utils/loadSpotifyScript';
-import request from '../../services/request';
-import config from '../../config';
 
 const Player: FC = () => {
   const { currentTrack } = useCitySettingContext();
@@ -40,7 +38,7 @@ const Player: FC = () => {
         player.current?.resume();
       }
     }
-  }, [player.current, playerState?.paused]);
+  }, [playerState?.paused]);
 
   useEffect(() => {
     window.onSpotifyWebPlaybackSDKReady = () => {
@@ -73,7 +71,7 @@ const Player: FC = () => {
         setPlayerState(state);
       });
     }
-  }, [player.current, scriptReady]);
+  }, [scriptReady]);
 
   useEffect(() => {
     if (currentTrack.uri && deviceId) {
