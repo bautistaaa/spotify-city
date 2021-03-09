@@ -6,20 +6,20 @@ import Play from './button/Play';
 import PlayerButton from './button/PlayerButton';
 
 import Seek from './button/Seek';
-import { useCitySettingContext } from '../../CitySettingsContext';
+import { TrackData, useCitySettingContext } from '../../CitySettingsContext';
 import loadSpotifyScript from '../../utils/loadSpotifyScript';
 
 const Player: FC = () => {
   const { currentTrack } = useCitySettingContext();
   const player = useRef<Spotify.SpotifyPlayer | null>(null);
   const [deviceId, setDeviceId] = useState<string | undefined>();
+  const [attemptedTrack, setAttemptedTrack] = useState<TrackData | undefined>();
   const [scriptReady, setScriptReady] = useState(false);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);
   const [playerState, setPlayerState] = useState<
     Spotify.PlaybackState | undefined
   >();
-
   const handlePlayButtonClicked = () => {
     // @ts-ignore
     setPlayerState((state) => {
@@ -49,7 +49,7 @@ const Player: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (scriptReady && !player.current) {
+    if ((scriptReady && !player.current) || attemptedTrack) {
       const token = window.localStorage.getItem('token');
       if (token) {
         player.current = new Spotify.Player({
@@ -68,27 +68,37 @@ const Player: FC = () => {
     }
     if (player.current) {
       player.current?.addListener('player_state_changed', (state) => {
+        // state -- undefined
         setPlayerState(state);
       });
     }
-  }, [scriptReady]);
+  }, [scriptReady, attemptedTrack]);
 
   useEffect(() => {
-    if (currentTrack.uri && deviceId) {
+    if ((currentTrack.uri || attemptedTrack?.uri) && deviceId) {
       const play = async () => {
         const token = window.localStorage.getItem('token');
-
-        await fetch(
-          `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
-          {
-            method: 'PUT',
-            body: JSON.stringify({ uris: [currentTrack.uri] }),
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
+        const trackToPlay = currentTrack ?? attemptedTrack;
+        try {
+          const resp = await fetch(
+            `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
+            {
+              method: 'PUT',
+              body: JSON.stringify({ uris: [trackToPlay.uri] }),
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (!resp.ok) {
+            throw new Error('shit!');
           }
-        );
+          setAttemptedTrack(undefined);
+        } catch (e) {
+          setAttemptedTrack(currentTrack);
+          setDeviceId(undefined);
+        }
         const state = await player.current?.getCurrentState();
         if (state) {
           setPlayerState(state);

@@ -6,10 +6,3 @@ BACKLOG:
 - prompts for buildings that dont have scenes
 - animated time of day changes
 
-CSS:GO
-______
-prompt is given to user
-"make background black" -- > background: black;
-"make div a circle with height 50px width 50px" border-radius: 50%; height... width..
-
-mutationobserver + getClientRectBounds === originalDomElement
