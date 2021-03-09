@@ -107,7 +107,7 @@ const Player: FC = () => {
 
       play();
     }
-  }, [currentTrack, deviceId]);
+  }, [currentTrack, deviceId, attemptedTrack]);
 
   useEffect(() => {
     if (player.current) {
