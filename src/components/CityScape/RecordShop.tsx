@@ -4,6 +4,7 @@ import Headphones from './Headphones';
 import { TimeOfDay } from '../../enums';
 import { RectResult } from '../../types';
 import useDegrees from '../../hooks/useDegrees';
+import HintArrow from './HintArrow';
 
 interface ColorPalette {
   building: string;
@@ -82,6 +83,9 @@ const RecordShop: FC<{
   return (
     <Wrapper ref={ref} onClick={onClick} background={colors.building}>
       <Billboard background={colors.billboard}>
+        <BillboardArrowWrapper>
+          <HintArrow />
+        </BillboardArrowWrapper>
         <Headphones fill={colors.fill} />
       </Billboard>
       <Roof background={colors.roof} />
@@ -106,6 +110,11 @@ const RecordShop: FC<{
   );
 };
 
+const BillboardArrowWrapper = styled.div`
+  position: absolute;
+  top: -50px;
+  left: 50%;
+`;
 const Wrapper = styled.div<{ background: string }>`
   cursor: pointer;
   width: 175px;

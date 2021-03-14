@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
 import { RectResult } from '../../types';
 import useDegrees from '../../hooks/useDegrees';
+import HintArrow from './HintArrow';
 
 interface ColorPalette {
   building: string;
@@ -93,6 +94,9 @@ const DonutShop: FC<{
   return (
     <Wrapper onClick={onClick}>
       <Roof>
+        <ArrowWrapper>
+          <HintArrow />
+        </ArrowWrapper>
         <DonutOuter background={colors.donutOuter}>
           <DonutInner background={colors.donutInner}>
             <DonutCenter background={colors.donutCenter} />
@@ -118,6 +122,11 @@ const DonutShop: FC<{
   );
 };
 
+const ArrowWrapper = styled.div`
+  position: absolute;
+  top: -133px;
+  left: 48%;
+`;
 const Wrapper = styled.div`
   cursor: pointer;
   display: flex;

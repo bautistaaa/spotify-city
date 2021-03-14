@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
 import useDegrees from '../../hooks/useDegrees';
 import { RectResult } from '../../types';
+import HintArrow from './HintArrow';
 
 interface ColorPalette {
   building: string;
@@ -70,6 +71,9 @@ const MusicHall: FC<{
       roof={colorPalette.roof}
       onClick={() => onClick()}
     >
+      <MusicHallArrowWrapper>
+        <HintArrow />
+      </MusicHallArrowWrapper>
       <Marquee timeOfDay={timeOfDay}>
         <div>NORVA</div>
       </Marquee>
@@ -101,6 +105,11 @@ const MusicHall: FC<{
     </Wrapper>
   );
 };
+const MusicHallArrowWrapper = styled.div`
+  position: absolute;
+  top: -50px;
+  left: 160px;
+`;
 const Wrapper = styled.div<{ background: string; roof: string }>`
   display: flex;
   flex-direction: column;

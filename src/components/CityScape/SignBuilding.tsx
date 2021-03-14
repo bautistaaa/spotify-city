@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 import { TimeOfDay } from '../../enums';
 import useDegrees from '../../hooks/useDegrees';
 import { RectResult } from '../../types';
+import HintArrow from './HintArrow';
 
 interface ColorPalette {
   building: string;
@@ -87,6 +88,9 @@ const SignBuilding: FC<{
 
   return (
     <Wrapper ref={ref} onClick={onClick}>
+      <ArrowWrapper>
+        <HintArrow />
+      </ArrowWrapper>
       <Roof background={colors.roof} />
       <Top background={colors.building}>
         <Sign timeOfDay={timeOfDay}>
@@ -195,6 +199,11 @@ const SignBuilding: FC<{
   );
 };
 
+const ArrowWrapper = styled.div`
+  position: absolute;
+  top: -65px;
+  left: 50%;
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
