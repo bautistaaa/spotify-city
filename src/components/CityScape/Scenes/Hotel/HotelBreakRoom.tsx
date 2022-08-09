@@ -33,7 +33,7 @@ const HotelBreakRoom: FC<{
         <>
           {collection?.playlists?.items.slice(start, end).map((item) => {
             return (
-              <a href={item.uri}>
+              <a href={item?.uri}>
                 <img
                   src={item?.images?.[0]?.url}
                   alt=""
