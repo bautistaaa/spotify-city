@@ -1,5 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
 import { createGlobalStyle } from 'styled-components/macro';
@@ -34,10 +33,12 @@ const GlobalStyling = createGlobalStyle`
   }
 `;
 
-ReactDOM.render(
-  <React.StrictMode>
+const container = document.getElementById('root');
+const root = createRoot(container as HTMLElement);
+
+root.render(
+  <>
     <GlobalStyling />
     <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  </>
 );
