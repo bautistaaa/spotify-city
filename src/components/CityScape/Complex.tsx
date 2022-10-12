@@ -1,8 +1,10 @@
-import { CSSProperties, FC, MutableRefObject, useRef } from 'react';
+import { FC, MutableRefObject, useRef } from 'react';
 import styled from 'styled-components/macro';
+
 import { TimeOfDay } from '../../enums';
 import useDegrees from '../../hooks/useDegrees';
 import { RectResult } from '../../types';
+import { createGroundShadow } from '../../utils/createGroundShadow';
 
 interface ColorPalette {
   concrete: string;
@@ -57,21 +59,7 @@ const Complex: FC<{
     x,
   });
 
-  const groundShadowStyle: CSSProperties = {
-    background: `linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3) 0%,
-      rgba(0, 0, 0, 0) 100%
-    )`,
-    position: `absolute`,
-    left: '0',
-    width: '100%',
-    height: '50px',
-    transformOrigin: '0 0',
-    pointerEvents: 'none',
-    transform: `skewX(${degrees}deg)`,
-    bottom: '-50px',
-  };
+  const groundShadowStyle = createGroundShadow(degrees);
 
   return (
     <Wrapper ref={ref}>

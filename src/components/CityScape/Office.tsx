@@ -235,7 +235,6 @@ const TopBalcony = styled.div`
   }
 `;
 const Chimney = styled.div`
-  content: '';
   position: absolute;
   top: -30px;
   width: 15px;

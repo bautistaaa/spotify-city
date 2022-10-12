@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import styled from 'styled-components/macro';
 import Arrow from './Arrow';
 import {
@@ -17,7 +17,7 @@ import BaseBench from './Bench';
 import Shop from './Shop';
 import Complex from './Complex';
 import DonutShop from './DonutShop';
-import Garage from './Garage';
+import { CozyHome } from './CozyHome';
 import RecordShop from './RecordShop';
 import MusicHall from './MusicHall';
 import School from './School';
@@ -200,7 +200,7 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
                   x={x}
                   timeOfDay={timeOfDay}
                 />
-                <Garage
+                <CozyHome
                   wrapperRect={scrollableRect}
                   sunMoonRect={sunMoonRect}
                   x={x}
@@ -252,7 +252,7 @@ const Cityscape: FC<{ audioFeatures: AudioFeature }> = ({ audioFeatures }) => {
             </p>
 
             <div
-              onChange={(e: FormEvent) => {
+              onChange={(e) => {
                 setValence(e.target.value);
               }}
               style={{ marginBottom: '20px', textAlign: 'left' }}
@@ -325,7 +325,7 @@ const Wrapper = styled.div<{ pixelsToMove: number; background: string }>`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 1500px;
+  width: 1700px;
   background: ${({ background }) => background};
   margin: 0 auto;
   position: relative;
@@ -409,6 +409,7 @@ const Ground = styled.div<{ color: string }>`
   height: 30px;
   width: 100%;
   background: ${({ color }) => color};
+  z-index: 10;
 `;
 const Moon = styled.div`
   position: absolute;

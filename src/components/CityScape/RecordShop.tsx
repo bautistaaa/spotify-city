@@ -1,10 +1,11 @@
-import { CSSProperties, FC, MutableRefObject, useRef } from 'react';
+import { FC, MutableRefObject, useRef } from 'react';
 import styled from 'styled-components/macro';
 import Headphones from './Headphones';
 import { TimeOfDay } from '../../enums';
 import { RectResult } from '../../types';
 import useDegrees from '../../hooks/useDegrees';
 import HintArrow from './HintArrow';
+import { createGroundShadow } from '../../utils/createGroundShadow';
 
 interface ColorPalette {
   building: string;
@@ -64,21 +65,7 @@ const RecordShop: FC<{
     x,
   });
 
-  const groundShadowStyle: CSSProperties = {
-    background: `linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.3) 0%,
-      rgba(0, 0, 0, 0) 100%
-    )`,
-    position: `absolute`,
-    left: '0',
-    width: '100%',
-    height: '50px',
-    transformOrigin: '0 0',
-    pointerEvents: 'none',
-    transform: `skewX(${degrees}deg)`,
-    bottom: '-50px',
-  };
+  const groundShadowStyle = createGroundShadow(degrees);
 
   return (
     <Wrapper ref={ref} onClick={onClick} background={colors.building}>

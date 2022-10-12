@@ -10,7 +10,7 @@ const MUSIC_BLURBS: { [K in TimeOfDay]: string[] } = {
   [TimeOfDay.Twilight]: [
     'pretty emo',
     'super chill',
-    'not quite so feel sorry for yourself type',
+    'feel sorry for yourself type',
     'kick up your feet and smile type',
   ],
   [TimeOfDay.Day]: [
